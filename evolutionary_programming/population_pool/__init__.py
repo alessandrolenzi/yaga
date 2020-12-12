@@ -1,9 +1,9 @@
-from typing import TypeVar, Sequence, Final, Iterable, NamedTuple, Generic, \
-    Callable
+from typing import TypeVar, Sequence, Final, Iterable, NamedTuple, Generic, Callable
 
 from evolutionary_programming.selectors.selector import IndividualType
 
-IndividualRepresentationType = TypeVar('IndividualRepresentationType')
+IndividualRepresentationType = TypeVar("IndividualRepresentationType")
+
 
 class PopulationPool(Generic[IndividualRepresentationType]):
     population: Final[Sequence[IndividualRepresentationType]]
@@ -16,6 +16,7 @@ class RankedIndividual(NamedTuple, Generic[IndividualType]):
     individual: IndividualType
     score: float
 
-class RankedPopulationPool(PopulationPool[RankedIndividual[IndividualType]]):
-    def __init__(self, ranker: Ranker[IndividualType], individuals: Iterable[IndividualType])
-        super().__init__()
+
+# class RankedPopulationPool(PopulationPool[RankedIndividual[IndividualType]]):
+#     def __init__(self, ranker: Ranker[IndividualType], individuals: Iterable[IndividualType])
+#         super().__init__()

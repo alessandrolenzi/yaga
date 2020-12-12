@@ -1,9 +1,10 @@
 import random
 import string
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar, Optional
+from typing import Generic, TypeVar, Optional, Mapping
 
-GeneType = TypeVar('GeneType')
+GeneType = TypeVar("GeneType")
+
 
 class GeneDefinition(Generic[GeneType], ABC):
     @abstractmethod
@@ -36,3 +37,10 @@ class CharGene(GeneDefinition[str]):
     def generate(self) -> str:
         return random.choice(self.allowed_characters)
 
+
+class DicGene(GeneDefinition[Mapping]):
+    def __init__(self, allowed_characters: Optional[Mapping] = None):
+        self.allowed_characters = allowed_characters or string.ascii_lowercase
+
+    def generate(self) -> Mapping:
+        return {}
