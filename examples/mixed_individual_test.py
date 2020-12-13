@@ -30,7 +30,7 @@ def test_mixed_individual():
             .define_gene(CharGene())
             .define_gene(CharGene())
         )
-        .selector(Tournament(tournament_size=3, selection_size=50))
+        .define_selector(Tournament(tournament_size=3, selection_size=50))
         .initialize()
     )
     eva.run(evaluation)

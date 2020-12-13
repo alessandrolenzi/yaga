@@ -14,7 +14,7 @@ class StochasticUniversalSampling(Selector[IndividualType]):
         selected_points = [
             start + pointers_distance * i for i in range(self.selection_size)
         ]
-        total_seen_score = 0
+        total_seen_score: float = 0.0
         for individual, score in population:
             cumulative_mating_probability = score + total_seen_score
             while (

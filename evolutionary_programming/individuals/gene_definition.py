@@ -1,7 +1,7 @@
 import random
 import string
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar, Optional, Mapping
+from typing import Generic, TypeVar, Optional, Sequence
 
 GeneType = TypeVar("GeneType")
 
@@ -37,10 +37,10 @@ class CharGene(GeneDefinition[str]):
     def generate(self) -> str:
         return random.choice(self.allowed_characters)
 
+class StringGene(GeneDefinition[str]):
+    def __init__(self, allowed_values: Sequence[str]):
+        self.allowed_values = allowed_values
 
-class DicGene(GeneDefinition[Mapping]):
-    def __init__(self, allowed_characters: Optional[Mapping] = None):
-        self.allowed_characters = allowed_characters or string.ascii_lowercase
+    def generate(self) -> str:
+        return random.choice(self.allowed_values)
 
-    def generate(self) -> Mapping:
-        return {}

@@ -27,7 +27,7 @@ def find_the_string():
                 )
             )
         )
-        .selector(Tournament(tournament_size=3, selection_size=10))
+        .define_selector(Tournament(tournament_size=3, selection_size=10))
         .initialize()
     )
     eva.run(evaluate)

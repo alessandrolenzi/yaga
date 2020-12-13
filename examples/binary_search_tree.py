@@ -149,7 +149,7 @@ def find_binary_tree():
     eva = (
         EvolutionaryAlgorithm(population_size=200, generations=2000, elite_ratio=0.05)
         .define_individual_structure(tree_structure(30))
-        .selector(Tournament(tournament_size=3, selection_size=50))
+        .define_selector(Tournament(tournament_size=3, selection_size=50))
         .initialize()
     )
     eva.run(evaluate_binary_search_tree)

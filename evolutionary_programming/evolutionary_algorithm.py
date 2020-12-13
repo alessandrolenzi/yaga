@@ -1,17 +1,19 @@
 import random
-from typing import Optional, Sequence, Callable, Tuple, Iterator, Iterable
+from concurrent.futures._base import Executor
+from typing import Optional, Sequence, Callable, Tuple, Iterator, Iterable, \
+    List
 
 from typing_extensions import Final
 
 from evolutionary_programming.individuals.individual_structure import (
-    IndividualStructure,
+    IndividualStructure, IndividualType,
 )
 from evolutionary_programming.operators.single_individual_operator import (
     MutationOperator,
-    OnePointCrossoverOperator,
 )
+from evolutionary_programming.operators.multiple_individual_operator import \
+    OnePointCrossoverOperator
 from evolutionary_programming.selectors.selector import Selector
-from genetic_algorithm.binary import IType
 
 
 class EvolutionaryAlgorithm:
@@ -28,23 +30,27 @@ class EvolutionaryAlgorithm:
     ):
         self.population_size = population_size
         self.generations = generations
-        self.population: Sequence[Sequence[IType]] = []
+        self.population: List[IndividualType] = []
         self.elite_size = int(elite_ratio * self.population_size)
         self.crossover_probability = crossover_probability
         self.mutation_probability = mutation_probability
         self.iterations = 0
 
     def define_individual_structure(
-        self, individual_structure: IndividualStructure[Sequence[IType]]
+        self, individual_structure: IndividualStructure[Sequence[IndividualType]]
     ):
         self.individual_structure = individual_structure
         return self
 
-    def selector(self, selector: Selector[Sequence[IType]]):
-        self.selector = selector
+    def define_selector(self, selector: Selector[IndividualType]):
+        self._selector = selector
         return self
 
-    def initialize(self, initial_population: Optional[Sequence[IType]] = None):
+    def define_executor(self, executor: Executor):
+        self.executor = executor
+        return self
+
+    def initialize(self, initial_population: Optional[Sequence[IndividualType]] = None):
         if initial_population:
             self.population = [i for i in initial_population]
 
@@ -53,8 +59,8 @@ class EvolutionaryAlgorithm:
         return self
 
     def run(
-        self, evaluation_function: Callable[[Sequence[IType]], float]
-    ) -> Tuple[IType, float]:
+        self, evaluation_function: Callable[[IndividualType], float]
+    ) -> Tuple[IndividualType, float]:
         while not self._should_stop():
             evaluated_population = self._evaluate(evaluation_function)
             self.population = list(
@@ -63,8 +69,8 @@ class EvolutionaryAlgorithm:
         return next(zip(self.population, self._evaluate(evaluation_function)))
 
     def _new_generation(
-        self, evaluated_population: Iterable[Tuple[Sequence[IType], float]]
-    ) -> Iterator[Sequence[IType]]:
+        self, evaluated_population: Iterable[Tuple[IndividualType, float]]
+    ) -> Iterator[IndividualType]:
         pop = list(evaluated_population)
         parents = list(self._select(pop))
         sorted_population = sorted(
@@ -78,7 +84,7 @@ class EvolutionaryAlgorithm:
         for _ in range(self.population_size - self.elite_size):
             yield self._generate_individual(parents)
 
-    def _generate_individual(self, parents: Sequence[Sequence[IType]]) -> IType:
+    def _generate_individual(self, parents: Sequence[IndividualType]) -> IndividualType:
         individual = parents[random.randint(0, len(parents) - 1)]
         if random.random() < self.crossover_probability:
             parent_2 = parents[random.randint(0, len(parents) - 1)]
@@ -89,25 +95,25 @@ class EvolutionaryAlgorithm:
         return individual
 
     def _crossover(
-        self, individual_1: Sequence[IType], individual_2: Sequence[IType]
-    ) -> IType:
+        self, individual_1: IndividualType, individual_2: IndividualType
+    ) -> IndividualType:
         return OnePointCrossoverOperator(self.individual_structure)(
             individual_1, individual_2
         )
 
-    def _mutate(self, _individual: IType):
+    def _mutate(self, _individual: IndividualType):
         return MutationOperator(self.individual_structure)(_individual)
 
     def _evaluate(
-        self, evaluation_function: Callable[[Sequence[IType]], float]
+        self, evaluation_function: Callable[[IndividualType], float]
     ) -> Iterator[float]:
         for individual in self.population:
             yield evaluation_function(individual)
 
     def _select(
-        self, population: Sequence[Tuple[Sequence[IType], float]]
-    ) -> Iterator[Sequence[IType]]:
-        return self.selector(population)
+        self, population: Sequence[Tuple[IndividualType, float]]
+    ) -> Iterable[IndividualType]:
+        return self._selector(population)
 
     def _should_stop(self):
         self.iterations += 1
