@@ -1,18 +1,19 @@
 import random
 from concurrent.futures._base import Executor
-from typing import Optional, Sequence, Callable, Tuple, Iterator, Iterable, \
-    List
+from typing import Optional, Sequence, Callable, Tuple, Iterator, Iterable, List
 
 from typing_extensions import Final
 
 from evolutionary_programming.individuals.individual_structure import (
-    IndividualStructure, IndividualType,
+    IndividualStructure,
+    IndividualType,
 )
 from evolutionary_programming.operators.single_individual_operator import (
     MutationOperator,
 )
-from evolutionary_programming.operators.multiple_individual_operator import \
-    OnePointCrossoverOperator
+from evolutionary_programming.operators.multiple_individual_operator import (
+    OnePointCrossoverOperator,
+)
 from evolutionary_programming.selectors.selector import Selector
 
 
@@ -36,9 +37,7 @@ class EvolutionaryAlgorithm:
         self.mutation_probability = mutation_probability
         self.iterations = 0
 
-    def define_individual_structure(
-        self, individual_structure: IndividualStructure[Sequence[IndividualType]]
-    ):
+    def define_individual_structure(self, individual_structure: IndividualStructure):
         self.individual_structure = individual_structure
         return self
 

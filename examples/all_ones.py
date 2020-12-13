@@ -1,12 +1,7 @@
 from typing import Sequence
 
-from evolutionary_programming.selectors.random import Random
-from evolutionary_programming.selectors.ranking import Ranking
-from evolutionary_programming.selectors.stochastic_universal_sampling import (
-    StochasticUniversalSampling,
-)
+from genetic_algorithm.binary import Binary as BinaryGeneticAlgorithm
 from evolutionary_programming.selectors.tournament import Tournament
-from genetic_algorithm.binary import BinaryGeneticAlgorithm
 
 
 def evaluate_ones(ind: Sequence[bool]):
@@ -18,9 +13,10 @@ def all_ones():
         genes=30,
         population_size=100,
         selector=Tournament(tournament_size=2, selection_size=20),
-        crossover_rate=0.8,
-        mutation_rate=0.5,
+        crossover_probability=0.8,
+        mutation_probability=0.5,
         elite_ratio=0.04,
+        generations=100,
     )
     algo.initialize()
     print(algo.run(evaluation_function=evaluate_ones))

@@ -8,8 +8,11 @@ class Random(Selector[IndividualType]):
     def __call__(
         self, population: Sequence[Tuple[IndividualType, float]]
     ) -> Iterable[IndividualType]:
-        for i in [
-            population[random.randint(0, len(population) - 1)]
-            for _ in range(self.selection_size)
-        ]:
-            yield i[0]
+        unique_indexes = set(
+            random.randint(0, len(population) - 1) for _ in range(self.selection_size)
+        )
+        while len(unique_indexes) < self.selection_size:
+            unique_indexes.add(random.randint(0, len(population) - 1))
+
+        for i in unique_indexes:
+            yield population[i][0]

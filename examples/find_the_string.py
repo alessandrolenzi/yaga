@@ -2,13 +2,13 @@ import string
 from typing import Sequence
 
 from evolutionary_programming.evolutionary_algorithm import EvolutionaryAlgorithm
-from evolutionary_programming.individuals.gene_factory import CharGene
+from evolutionary_programming.individuals.gene_definition import CharGene
 from evolutionary_programming.individuals.uniform_individual import (
     UniformIndividualStructure,
 )
 from evolutionary_programming.selectors.tournament import Tournament
 
-to_find = "marie est française"
+to_find = "welcome to yaga"
 
 
 def evaluate(ind: Sequence[str]):
@@ -22,7 +22,7 @@ def find_the_string():
         .define_individual_structure(
             UniformIndividualStructure(
                 tuple(
-                    CharGene(allowed_characters=string.ascii_lowercase + " ç")
+                    CharGene(allowed_characters=string.ascii_lowercase + " ")
                     for _ in range(len(to_find))
                 )
             )

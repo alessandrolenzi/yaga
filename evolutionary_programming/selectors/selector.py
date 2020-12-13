@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic, Sequence, Tuple, Iterable, Final
+from typing import Generic, Sequence, Tuple, Iterable, Final
 
-IndividualType = TypeVar("IndividualType")
+from evolutionary_programming.individuals.individual_structure import IndividualType, G
 
 
-class Selector(Generic[IndividualType], ABC):
+class Selector(Generic[G], ABC):
     """Abstract Selector class.
     A Selector has the responsibility of selecting the elements of the population
     that can reproduce.
@@ -19,6 +19,6 @@ class Selector(Generic[IndividualType], ABC):
 
     @abstractmethod
     def __call__(
-        self, population: Sequence[Tuple[IndividualType, float]]
-    ) -> Iterable[IndividualType]:
+        self, population: Sequence[Tuple[IndividualType[G], float]]
+    ) -> Iterable[IndividualType[G]]:
         ...

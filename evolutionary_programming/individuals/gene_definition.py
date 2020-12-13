@@ -37,10 +37,10 @@ class CharGene(GeneDefinition[str]):
     def generate(self) -> str:
         return random.choice(self.allowed_characters)
 
+
 class StringGene(GeneDefinition[str]):
     def __init__(self, allowed_values: Sequence[str]):
         self.allowed_values = allowed_values
 
     def generate(self) -> str:
         return random.choice(self.allowed_values)
-

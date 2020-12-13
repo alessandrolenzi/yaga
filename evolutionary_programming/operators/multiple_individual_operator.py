@@ -4,8 +4,11 @@ from typing import Generic
 
 from typing_extensions import Final
 
-from evolutionary_programming.individuals.individual_structure import \
-    IndividualStructure, G, IndividualType
+from evolutionary_programming.individuals.individual_structure import (
+    IndividualStructure,
+    G,
+    IndividualType,
+)
 
 
 class MultipleIndividualOperator(Generic[G]):
@@ -14,8 +17,6 @@ class MultipleIndividualOperator(Generic[G]):
 
 
 class OnePointCrossoverOperator(MultipleIndividualOperator[G]):
-
-
     def __call__(
         self, _parent1: IndividualType[G], _parent2: IndividualType[G]
     ) -> IndividualType:
@@ -27,5 +28,3 @@ class OnePointCrossoverOperator(MultipleIndividualOperator[G]):
         return self.individual_structure.build_individual_from_genes_values(
             serialised_individual
         )
-
-
