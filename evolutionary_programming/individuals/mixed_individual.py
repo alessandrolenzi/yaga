@@ -18,20 +18,20 @@ class MixedIndividualStructure(
     def __init__(
         self,
         genes: Union[Sequence[GeneDefinition], GeneDefinition],
-        individual_class: Optional[
+        gene_holder: Optional[
             Callable[[Iterable[Any]], IndividualType[Any]]
         ] = None,
     ):
         GeneSequenceTrait.__init__(self, genes)
-        IndividualStructure.__init__(self, individual_class or tuple)
+        IndividualStructure.__init__(self, gene_holder or tuple)
 
     def add_gene(self, gene_definition: GeneDefinition[Q]):
         return self.__class__(
-            self._update_genes(gene_definition), individual_class=self._builder
+            self._update_genes(gene_definition), gene_holder=self._gene_holder
         )
 
     def build(self):
-        return self._builder(i.generate() for i in self.genes)
+        return self._gene_holder(i.generate() for i in self.genes)
 
     def build_individual_from_genes_values(self, ind):
-        return self._builder(ind)
+        return self._gene_holder(ind)

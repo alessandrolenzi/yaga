@@ -5,6 +5,7 @@ from typing import (
     Union,
     Iterable,
     Callable,
+    Sequence
 )
 from evolutionary_programming.genes.gene_definition import GeneDefinition
 from .individual_structure import IndividualType, IndividualStructure
@@ -17,20 +18,26 @@ SType = TypeVar("SType")
 class UniformIndividualStructure(
     GeneSequenceTrait[GeneDefinition[GenesType]], IndividualStructure[GenesType]
 ):
+    """
+    Represents an individual with genes all of the same type.
+
+    :param Seuence[GeneDefinition] or GeneDefinition genes: initial genes
+    :param
+    """
     def __init__(
         self,
-        genes: Union[Tuple[GeneDefinition[GenesType], ...], GeneDefinition[GenesType]],
-        individual_class: Optional[
+        genes: Union[Sequence[GeneDefinition[GenesType]], GeneDefinition[GenesType]],
+        gene_holder: Optional[
             Callable[[Iterable[GenesType]], IndividualType[GenesType]]
         ] = None,
     ):
         GeneSequenceTrait.__init__(self, genes)
-        IndividualStructure.__init__(self, individual_class or tuple)
+        IndividualStructure.__init__(self, gene_holder or tuple)
 
     def add_gene(self, gene_definition: GeneDefinition[GenesType]):
         return self.__class__(
-            self._update_genes(gene_definition), individual_class=self._builder
+            self._update_genes(gene_definition), gene_holder=self._gene_holder
         )
 
     def build(self) -> IndividualType[GenesType]:
-        return self._builder(gene.generate() for gene in self.genes)
+        return self._gene_holder(gene.generate() for gene in self.genes)

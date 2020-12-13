@@ -5,7 +5,8 @@ GeneType = TypeVar("GeneType")
 
 
 class GeneDefinition(Generic[GeneType], ABC):
-    """Class responsible for defining genes.
+    """
+    Represents a gene (a part of a solution).
 
     A GeneDefinition represents a certain feature of the problem
     we are trying to represent. It emits a concrete gene with generate()

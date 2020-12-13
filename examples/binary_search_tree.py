@@ -96,7 +96,7 @@ class TreeIndividualStructure(UniformIndividualStructure[GenesType]):
         self,
         genes: Union[Tuple[GeneDefinition[GenesType], ...], GeneDefinition[GenesType]],
     ):
-        super().__init__(genes, individual_class=Tree.from_values)
+        super().__init__(genes, gene_holder=Tree.from_values)
 
 
 def tree_structure(nodes: int):

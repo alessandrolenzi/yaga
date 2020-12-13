@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar, Iterable, Protocol, Callable
 
+from typing_extensions import Final
+
 from evolutionary_programming.genes.gene_definition import GeneDefinition
 
 
@@ -23,11 +25,11 @@ class IndividualStructure(Generic[G], ABC):
     """
     Defines the structure of a class of individuals (problem solutions) through its genes.
 
-    :param  Callable[[Iterable[G]], IndividualType[G]] individual_builder: method to generate the concrete representation of an individual from an iterable
+    :param  Callable[[Iterable[G]], IndividualType[G]] gene_holder: method to generate the concrete representation of an individual from an iterable
     """
 
-    def __init__(self, individual_builder: Callable[[Iterable[G]], IndividualType[G]]):
-        self._builder = individual_builder
+    def __init__(self, gene_holder: Callable[[Iterable[G]], IndividualType[G]]):
+        self._gene_holder: Final = gene_holder
 
     def __len__(self):
         """ Dimensions of the solution"""
@@ -51,4 +53,4 @@ class IndividualStructure(Generic[G], ABC):
 
         :param Iterable[G] it: iterable of values of the genes composing the individual to be built.
         """
-        return self._builder(it)
+        return self._gene_holder(it)
