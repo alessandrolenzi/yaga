@@ -1,6 +1,6 @@
 import pytest
 
-from evolutionary_programming.individuals.gene_definition import CharGene
+from evolutionary_programming.genes import CharGene
 from evolutionary_programming.individuals.uniform_individual import (
     UniformIndividualStructure,
 )
@@ -22,7 +22,7 @@ def test_progressive_initialization():
     individual = UniformIndividualStructure(gene_1)
     assert len(individual) == 1
     assert len(individual.build()) == 1
-    individual_2 = individual.define_gene(gene_2)
+    individual_2 = individual.add_gene(gene_2)
     assert len(individual_2) == 2
     assert len(individual_2.build()) == 2
     assert individual_2[0] == gene_1

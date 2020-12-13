@@ -2,7 +2,7 @@ import string
 from typing import Sequence
 
 from evolutionary_programming.evolutionary_algorithm import EvolutionaryAlgorithm
-from evolutionary_programming.individuals.gene_definition import CharGene
+from evolutionary_programming.genes import CharGene
 from evolutionary_programming.individuals.uniform_individual import (
     UniformIndividualStructure,
 )

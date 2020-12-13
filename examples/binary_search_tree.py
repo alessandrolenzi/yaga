@@ -2,11 +2,10 @@ from dataclasses import dataclass
 from typing import TypeVar, Generic, Optional, Type, Iterable, Union, Tuple, Iterator
 
 from evolutionary_programming.evolutionary_algorithm import EvolutionaryAlgorithm
-from evolutionary_programming.individuals.gene_definition import IntGene, GeneDefinition
+from evolutionary_programming.genes.gene_definition import GeneDefinition
+from evolutionary_programming.genes import IntGene
 from evolutionary_programming.individuals.uniform_individual import (
-    UniformIndividualStructure,
     GenesType,
-    IndividualStructure,
 )
 from evolutionary_programming.individuals.uniform_individual import (
     UniformIndividualStructure,
@@ -67,11 +66,12 @@ def _is_bst(t: Optional[Tree[int]]):
         return True
     value = t.value
     return (
-        (t.left is None or t.left.value <= value) and
-        (t.right is None or t.right.value >= value) and
-        _is_bst(t.left) and
-        _is_bst(t.right)
+        (t.left is None or t.left.value <= value)
+        and (t.right is None or t.right.value >= value)
+        and _is_bst(t.left)
+        and _is_bst(t.right)
     )
+
 
 def evaluate_binary_search_tree(t: Tree[int]):
     def _evaluate_recursive(t: Tree[int]):

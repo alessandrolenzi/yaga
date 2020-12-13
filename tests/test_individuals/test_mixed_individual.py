@@ -1,7 +1,7 @@
-from evolutionary_programming.individuals.gene_definition import CharGene, \
-    IntGene
-from evolutionary_programming.individuals.mixed_individual import \
-    MixedIndividualStructure
+from evolutionary_programming.genes import IntGene, CharGene
+from evolutionary_programming.individuals.mixed_individual import (
+    MixedIndividualStructure,
+)
 
 
 def test_initialization_with_tuple():
@@ -24,7 +24,7 @@ def test_progressive_initialization():
     built = individual.build()
     assert len(built) == 1
     assert type(built[0]) == str
-    individual_2 = individual.define_gene(gene_2)
+    individual_2 = individual.add_gene(gene_2)
     assert len(individual_2) == 2
     assert individual_2[0] == gene_1
     assert individual_2[1] == gene_2

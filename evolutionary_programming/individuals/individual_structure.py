@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar, Iterable, Protocol, Type, Callable
+from typing import Generic, TypeVar, Iterable, Protocol, Callable
 
-from evolutionary_programming.individuals.gene_definition import GeneDefinition
+from evolutionary_programming.genes.gene_definition import GeneDefinition
 
 
 class InvalidIndividual(ValueError):
@@ -20,21 +20,35 @@ Q = TypeVar("Q")
 
 
 class IndividualStructure(Generic[G], ABC):
-    def __init__(self, individual_class: Callable[[Iterable[G]], IndividualType[G]]):
-        self._builder = individual_class
+    """
+    Defines the structure of a class of individuals (problem solutions) through its genes.
+
+    :param  Callable[[Iterable[G]], IndividualType[G]] individual_builder: method to generate the concrete representation of an individual from an iterable
+    """
+
+    def __init__(self, individual_builder: Callable[[Iterable[G]], IndividualType[G]]):
+        self._builder = individual_builder
 
     def __len__(self):
+        """ Dimensions of the solution"""
         ...
 
     @abstractmethod
-    def __getitem__(self, item: int) -> GeneDefinition[G]:
+    def __getitem__(self, pos: int) -> GeneDefinition[G]:
+        """ Returns gene identified by pos"""
         ...
 
     @abstractmethod
     def build(self) -> IndividualType[G]:
+        """ Generates a specific individual of this class."""
         ...
 
-    def build_individual_from_genes_values(
-            self, it: Iterable[G]
-    ) -> IndividualType[G]:
+    def build_individual_from_genes_values(self, it: Iterable[G]) -> IndividualType[G]:
+        """Generates an individual starting from provided values
+
+        Specifically, element in the iterable at position i will correspond to the value
+        taken by the gene in position i.
+
+        :param Iterable[G] it: iterable of values of the genes composing the individual to be built.
+        """
         return self._builder(it)

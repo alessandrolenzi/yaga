@@ -1,7 +1,7 @@
 from typing import Optional
 
 from evolutionary_programming.evolutionary_algorithm import EvolutionaryAlgorithm
-from evolutionary_programming.individuals.gene_definition import IntGene
+from evolutionary_programming.genes import IntGene
 from evolutionary_programming.individuals.individual_structure import IndividualType
 from evolutionary_programming.individuals.uniform_individual import (
     UniformIndividualStructure,

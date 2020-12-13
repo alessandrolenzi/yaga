@@ -1,46 +1,19 @@
-import random
-import string
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar, Optional, Sequence
+from typing import Generic, TypeVar
 
 GeneType = TypeVar("GeneType")
 
 
 class GeneDefinition(Generic[GeneType], ABC):
+    """Class responsible for defining genes.
+
+    A GeneDefinition represents a certain feature of the problem
+    we are trying to represent. It emits a concrete gene with generate()
+    """
+
     @abstractmethod
     def generate(self) -> GeneType:
+        """Generates a gene.
+        :returns a gene instance.
+        """
         pass
-
-
-class IntGene(GeneDefinition[int]):
-    def __init__(self, lower_bound: int, upper_bound: int):
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-    def generate(self) -> int:
-        return random.randint(self.lower_bound, self.upper_bound)
-
-
-class FloatGene(GeneDefinition[float]):
-    def __init__(self, lower_bound: float, upper_bound: float):
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-    def generate(self) -> float:
-        return random.uniform(self.lower_bound, self.upper_bound)
-
-
-class CharGene(GeneDefinition[str]):
-    def __init__(self, allowed_characters: Optional[str] = None):
-        self.allowed_characters = allowed_characters or string.ascii_lowercase
-
-    def generate(self) -> str:
-        return random.choice(self.allowed_characters)
-
-
-class StringGene(GeneDefinition[str]):
-    def __init__(self, allowed_values: Sequence[str]):
-        self.allowed_values = allowed_values
-
-    def generate(self) -> str:
-        return random.choice(self.allowed_values)
