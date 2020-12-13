@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import TypeVar, Generic, Optional, Type, Iterable, Union, Tuple
+from typing import TypeVar, Generic, Optional, Type, Iterable, Union, Tuple, Iterator
 
 from evolutionary_programming.evolutionary_algorithm import EvolutionaryAlgorithm
 from evolutionary_programming.individuals.gene_definition import IntGene, GeneDefinition
@@ -23,7 +23,7 @@ class Tree(Generic[T]):
     left: "Optional[Tree[T]]" = None
     right: "Optional[Tree[T]]" = None
 
-    def __iter__(self) -> Iterable[T]:
+    def __iter__(self) -> Iterator[T]:
         q = [self]
         while q:
             current = q.pop(0)
@@ -45,16 +45,16 @@ class Tree(Generic[T]):
         root = None
         for value in values:
             if root is None:
-                root = Tree(value=value)
+                root = cls(value=value)
                 to_fill_queue.append(root)
                 continue
             parent = to_fill_queue[0]
             if not parent.left:
-                parent.left = Tree(value=value)
+                parent.left = cls(value=value)
                 to_fill_queue.append(parent.left)
                 continue
             if not parent.right:
-                parent.right = Tree(value=value)
+                parent.right = cls(value=value)
                 to_fill_queue.append(parent.right)
                 to_fill_queue.pop(0)
         if root is None:
@@ -65,14 +65,13 @@ class Tree(Generic[T]):
 def _is_bst(t: Optional[Tree[int]]):
     if t is None:
         return True
-    if t.left is None and t.right is None:
-        return True
-    if t.left is None:
-        return t.right.value >= t.value
-    if t.right is None:
-        return t.left.value <= t.value
-    return t.left.value <= t.value and t.right.value >= t.value
-
+    value = t.value
+    return (
+        (t.left is None or t.left.value <= value) and
+        (t.right is None or t.right.value >= value) and
+        _is_bst(t.left) and
+        _is_bst(t.right)
+    )
 
 def evaluate_binary_search_tree(t: Tree[int]):
     def _evaluate_recursive(t: Tree[int]):
@@ -101,10 +100,9 @@ class TreeIndividualStructure(UniformIndividualStructure[GenesType]):
 
 
 def tree_structure(nodes: int):
-    ind = TreeIndividualStructure(
+    return TreeIndividualStructure(
         tuple(IntGene(lower_bound=0, upper_bound=50) for _ in range(nodes))
     )
-    return ind
 
 
 def find_binary_tree():

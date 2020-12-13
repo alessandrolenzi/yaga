@@ -17,12 +17,14 @@ from evolutionary_programming.individuals.individual_structure import (
     IndividualType,
     InvalidIndividual,
 )
+from evolutionary_programming.individuals.traits.gene_sequence import \
+    GeneSequenceTrait
 
 GenesType = TypeVar("GenesType")
 SType = TypeVar("SType")
 
 
-class UniformIndividualStructure(IndividualStructure[GenesType]):
+class UniformIndividualStructure(GeneSequenceTrait[GeneDefinition[GenesType]], IndividualStructure[GenesType]):
     def __init__(
         self,
         genes: Union[Tuple[GeneDefinition[GenesType], ...], GeneDefinition[GenesType]],
@@ -30,27 +32,12 @@ class UniformIndividualStructure(IndividualStructure[GenesType]):
             Callable[[Iterable[GenesType]], IndividualType[GenesType]]
         ] = None,
     ):
-        self.genes: Final[Tuple[GeneDefinition[GenesType], ...]] = (
-            (genes,) if isinstance(genes, GeneDefinition) else genes
-        )
-        super().__init__(individual_class or tuple)
+        GeneSequenceTrait.__init__(self, genes)
+        IndividualStructure.__init__(self, individual_class or tuple)
 
     def define_gene(self, gene_definition: GeneDefinition[GenesType]):
-        our_gene = (gene_definition,)
-        return self.__class__(self.genes + our_gene, individual_class=self._builder)
-
-    def __getitem__(self, item: int):
-        if 0 <= item < len(self.genes):
-            return self.genes[item]
-        raise IndexError(f"No gene with id {item}")
-
-    def __len__(self):
-        return len(self.genes)
+        return self.__class__(self._update_genes(gene_definition), individual_class=self._builder)
 
     def build(self) -> IndividualType[GenesType]:
         return self._builder(gene.generate() for gene in self.genes)
 
-    def build_individual_from_genes_values(
-        self, it: Iterable[GenesType]
-    ) -> IndividualType[GenesType]:
-        return self._builder(it)

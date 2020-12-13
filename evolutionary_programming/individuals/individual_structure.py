@@ -23,10 +23,6 @@ class IndividualStructure(Generic[G], ABC):
     def __init__(self, individual_class: Callable[[Iterable[G]], IndividualType[G]]):
         self._builder = individual_class
 
-    @abstractmethod
-    def define_gene(self: T, gene_definition: GeneDefinition[G]) -> T:
-        ...
-
     def __len__(self):
         ...
 
@@ -38,6 +34,7 @@ class IndividualStructure(Generic[G], ABC):
     def build(self) -> IndividualType[G]:
         ...
 
-    @abstractmethod
-    def build_individual_from_genes_values(self, it: Iterable) -> IndividualType[G]:
-        ...
+    def build_individual_from_genes_values(
+            self, it: Iterable[G]
+    ) -> IndividualType[G]:
+        return self._builder(it)
