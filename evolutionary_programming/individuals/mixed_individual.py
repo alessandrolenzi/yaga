@@ -13,25 +13,24 @@ Q = TypeVar("Q")
 class MixedIndividualStructure(
     GeneSequenceTrait[GeneDefinition[Any]], IndividualStructure[Any]
 ):
-    """Represents an individual structure with genes of different types"""
+    """
+    Represents an individual structure with genes of different types
+
+    :param Seuence[GeneDefinition] or GeneDefinition genes: initial genes
+    :param genes_holder: callable returning a structure responsible of holding concrete genes (default is tuple)
+    """
 
     def __init__(
         self,
         genes: Union[Sequence[GeneDefinition], GeneDefinition],
-        gene_holder: Optional[
+        genes_holder: Optional[
             Callable[[Iterable[Any]], IndividualType[Any]]
         ] = None,
     ):
         GeneSequenceTrait.__init__(self, genes)
-        IndividualStructure.__init__(self, gene_holder or tuple)
+        IndividualStructure.__init__(self, genes_holder or tuple)
 
     def add_gene(self, gene_definition: GeneDefinition[Q]):
         return self.__class__(
-            self._update_genes(gene_definition), gene_holder=self._gene_holder
+            self._update_genes(gene_definition), genes_holder=self._gene_holder
         )
-
-    def build(self):
-        return self._gene_holder(i.generate() for i in self.genes)
-
-    def build_individual_from_genes_values(self, ind):
-        return self._gene_holder(ind)

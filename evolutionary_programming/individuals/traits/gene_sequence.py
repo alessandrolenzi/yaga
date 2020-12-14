@@ -1,5 +1,5 @@
 from collections import abc
-from typing import Union, Tuple, TypeVar, Sequence, Generic
+from typing import Union, Tuple, TypeVar, Sequence, Generic, Iterator
 from typing_extensions import Final
 
 T = TypeVar("T")
@@ -19,6 +19,10 @@ class GeneSequenceTrait(Generic[T]):
 
     def __len__(self):
         return len(self.genes)
+
+    def __iter__(self) -> Iterator[T]:
+        for gene in self.genes:
+            yield gene
 
     @classmethod
     def _to_tuple(cls, genes: Union[Sequence[T], T]) -> Tuple[T, ...]:

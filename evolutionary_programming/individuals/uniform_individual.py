@@ -22,22 +22,19 @@ class UniformIndividualStructure(
     Represents an individual with genes all of the same type.
 
     :param Seuence[GeneDefinition] or GeneDefinition genes: initial genes
-    :param
+    :param genes_holder: callable returning a structure responsible of holding concrete genes (default is tuple)
     """
     def __init__(
         self,
         genes: Union[Sequence[GeneDefinition[GenesType]], GeneDefinition[GenesType]],
-        gene_holder: Optional[
+        genes_holder: Optional[
             Callable[[Iterable[GenesType]], IndividualType[GenesType]]
         ] = None,
     ):
         GeneSequenceTrait.__init__(self, genes)
-        IndividualStructure.__init__(self, gene_holder or tuple)
+        IndividualStructure.__init__(self, genes_holder or tuple)
 
     def add_gene(self, gene_definition: GeneDefinition[GenesType]):
         return self.__class__(
-            self._update_genes(gene_definition), gene_holder=self._gene_holder
+            self._update_genes(gene_definition), genes_holder=self._gene_holder
         )
-
-    def build(self) -> IndividualType[GenesType]:
-        return self._gene_holder(gene.generate() for gene in self.genes)
