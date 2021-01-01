@@ -1,19 +1,29 @@
 import random
 from concurrent.futures._base import Executor
-from typing import Optional, Sequence, Callable, Tuple, Iterator, Iterable, List
+from typing import (
+    Optional,
+    Sequence,
+    Callable,
+    Tuple,
+    Iterator,
+    Iterable,
+    List,
+)
 
 from typing_extensions import Final
 
+from evolutionary_programming.details import Comparable
 from evolutionary_programming.individuals.individual_structure import (
     IndividualStructure,
     IndividualType,
 )
-from evolutionary_programming.operators.single_individual_operator import (
-    MutationOperator,
-)
-from evolutionary_programming.operators.multiple_individual_operator import (
+from evolutionary_programming.operators.multiple_individuals.crossover.one_point import (
     OnePointCrossoverOperator,
 )
+from evolutionary_programming.operators.single_individual.mutation import (
+    MutationOperator,
+)
+
 from evolutionary_programming.selectors.selector import Selector
 
 
@@ -58,8 +68,8 @@ class EvolutionaryAlgorithm:
         return self
 
     def run(
-        self, evaluation_function: Callable[[IndividualType], float]
-    ) -> Tuple[IndividualType, float]:
+        self, evaluation_function: Callable[[IndividualType], Comparable]
+    ) -> Tuple[IndividualType, Comparable]:
         while not self._should_stop():
             evaluated_population = self._evaluate(evaluation_function)
             self.population = list(
@@ -68,7 +78,7 @@ class EvolutionaryAlgorithm:
         return next(zip(self.population, self._evaluate(evaluation_function)))
 
     def _new_generation(
-        self, evaluated_population: Iterable[Tuple[IndividualType, float]]
+        self, evaluated_population: Iterable[Tuple[IndividualType, Comparable]]
     ) -> Iterator[IndividualType]:
         pop = list(evaluated_population)
         parents = list(self._select(pop))
@@ -87,30 +97,25 @@ class EvolutionaryAlgorithm:
         individual = parents[random.randint(0, len(parents) - 1)]
         if random.random() < self.crossover_probability:
             parent_2 = parents[random.randint(0, len(parents) - 1)]
-            return self._crossover(individual, parent_2)
+            individual = OnePointCrossoverOperator(self.individual_structure)(
+                [individual, parent_2]
+            )
 
         if random.random() < self.mutation_probability:
             individual = self._mutate(individual)
         return individual
 
-    def _crossover(
-        self, individual_1: IndividualType, individual_2: IndividualType
-    ) -> IndividualType:
-        return OnePointCrossoverOperator(self.individual_structure)(
-            individual_1, individual_2
-        )
-
     def _mutate(self, _individual: IndividualType):
         return MutationOperator(self.individual_structure)(_individual)
 
     def _evaluate(
-        self, evaluation_function: Callable[[IndividualType], float]
-    ) -> Iterator[float]:
+        self, evaluation_function: Callable[[IndividualType], Comparable]
+    ) -> Iterator[Comparable]:
         for individual in self.population:
             yield evaluation_function(individual)
 
     def _select(
-        self, population: Sequence[Tuple[IndividualType, float]]
+        self, population: Sequence[Tuple[IndividualType, Comparable]]
     ) -> Iterable[IndividualType]:
         return self._selector(population)
 

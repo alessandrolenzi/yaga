@@ -23,9 +23,7 @@ class MixedIndividualStructure(
     def __init__(
         self,
         genes: Union[Sequence[GeneDefinition], GeneDefinition],
-        genes_holder: Optional[
-            Callable[[Iterable[Any]], IndividualType[Any]]
-        ] = None,
+        genes_holder: Optional[Callable[[Iterable[Any]], IndividualType[Any]]] = None,
     ):
         GeneSequenceTrait.__init__(self, genes)
         IndividualStructure.__init__(self, genes_holder or tuple)

@@ -1,24 +1,27 @@
 from abc import ABC, abstractmethod
-from typing import Generic, Sequence, Tuple, Iterable, Final
+from typing import (
+    Generic,
+    Sequence,
+    Tuple,
+    Iterable,
+    Final,
+    Protocol,
+    TypeVar,
+    Callable,
+)
 
+from evolutionary_programming.details import Comparable
 from evolutionary_programming.individuals.individual_structure import IndividualType, G
 
+T = TypeVar("T", bound=Comparable)
 
-class Selector(Generic[G], ABC):
-    """Abstract Selector class.
-    A Selector has the responsibility of selecting the elements of the population
-    that can reproduce.
-    Expects to receive an already scored population.
-    :param selection_size (int) the number of surviving members of the population
-    """
 
-    selection_size: Final[int]
-
+class Selector(Generic[G, T]):
     def __init__(self, selection_size: int):
         self.selection_size = selection_size
 
     @abstractmethod
     def __call__(
-        self, population: Sequence[Tuple[IndividualType[G], float]]
+        self, population: Sequence[Tuple[IndividualType[G], T]]
     ) -> Iterable[IndividualType[G]]:
         ...

@@ -1,23 +1,14 @@
 import itertools
 import random
-from typing import Generic
 
 from typing_extensions import Final
 
-from evolutionary_programming.individuals.individual_structure import (
-    IndividualStructure,
-    IndividualType,
-    G,
+from evolutionary_programming.individuals import IndividualStructure, IndividualType
+from evolutionary_programming.individuals.individual_structure import G
+from evolutionary_programming.operators.single_individual.base import (
+    SingleIndividualOperator,
 )
-
-
-class SingleIndividualOperator(Generic[G]):
-    def __init__(self, individual_structure: IndividualStructure[G]):
-        self.individual_structure: Final = individual_structure
-
-
-class InvalidOperatorError(ValueError):
-    pass
+from evolutionary_programming.operators.base import InvalidOperatorError
 
 
 class MutationOperator(SingleIndividualOperator[G]):

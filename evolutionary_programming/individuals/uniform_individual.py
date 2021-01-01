@@ -1,12 +1,4 @@
-from typing import (
-    TypeVar,
-    Optional,
-    Tuple,
-    Union,
-    Iterable,
-    Callable,
-    Sequence
-)
+from typing import TypeVar, Optional, Tuple, Union, Iterable, Callable, Sequence
 from evolutionary_programming.genes.gene_definition import GeneDefinition
 from .individual_structure import IndividualType, IndividualStructure
 from .traits.gene_sequence import GeneSequenceTrait
@@ -24,6 +16,7 @@ class UniformIndividualStructure(
     :param Seuence[GeneDefinition] or GeneDefinition genes: initial genes
     :param genes_holder: callable returning a structure responsible of holding concrete genes (default is tuple)
     """
+
     def __init__(
         self,
         genes: Union[Sequence[GeneDefinition[GenesType]], GeneDefinition[GenesType]],
