@@ -5,12 +5,12 @@ from evolutionary_programming.details import Comparable
 from evolutionary_programming.selectors.selector import IndividualType
 
 
-class ScorableComparable(Comparable):
+class FloatComparable(Comparable):
     def __float__(self) -> float:
         ...
 
 
-ScoreType = TypeVar("ScoreType", bound=ScorableComparable)
+ScoreType = TypeVar("ScoreType", bound=FloatComparable)
 
 
 class StochasticUniversalSampling(Generic[IndividualType, ScoreType]):
