@@ -1,12 +1,13 @@
-from typing import Iterable, Sequence
+from typing import Iterable, Sequence, Tuple
 
-from evolutionary_programming.selectors.selector import Selector, IndividualType
+from evolutionary_programming.selectors.selector import Selector, IndividualType, T
 
 
-class Ranking(Selector[IndividualType]):
+class Ranking(Selector):
     def __call__(
-        self, population: Sequence[IndividualType]
+        self, population: Sequence[Tuple[IndividualType, T]]
     ) -> Iterable[IndividualType]:
-        _pop = [(i, self._score_function(i)) for i in population]
-        for i in sorted(_pop, key=lambda x: x[1], reverse=True)[: self.selection_size]:
+        for i in sorted(population, key=lambda x: x[1], reverse=True)[
+            : self.selection_size
+        ]:
             yield i[0]

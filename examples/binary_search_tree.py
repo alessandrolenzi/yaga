@@ -1,14 +1,27 @@
+import itertools
 from dataclasses import dataclass
-from typing import TypeVar, Generic, Optional, Type, Iterable, Union, Tuple, Iterator
+from typing import (
+    TypeVar,
+    Generic,
+    Optional,
+    Type,
+    Iterable,
+    Union,
+    Tuple,
+    Iterator,
+    Final,
+    Sequence,
+)
 
-from evolutionary_programming.evolutionary_algorithm import EvolutionaryAlgorithm
+from evolutionary_programming.builder import EvolutionaryAlgorithmBuilder
 from evolutionary_programming.genes.gene_definition import GeneDefinition
 from evolutionary_programming.genes import IntGene
-from evolutionary_programming.individuals.uniform_individual import (
-    GenesType,
+from evolutionary_programming.individuals import IndividualStructure
+from evolutionary_programming.operators.multiple_individuals.crossover.one_point import (
+    OnePointCrossoverOperator,
 )
-from evolutionary_programming.individuals.uniform_individual import (
-    UniformIndividualStructure,
+from evolutionary_programming.operators.single_individual.mutation import (
+    MutationOperator,
 )
 from evolutionary_programming.selectors.tournament import Tournament
 
@@ -91,12 +104,27 @@ def evaluate_binary_search_tree(t: Tree[int]):
     return (_evaluate_recursive(t) / 30) * _tot_values_held
 
 
-class TreeIndividualStructure(UniformIndividualStructure[GenesType]):
+class TreeIndividualStructure(IndividualStructure[Tree[int], int]):
+
+    genes: Final[Tree[GeneDefinition[int]]]
+
     def __init__(
-        self,
-        genes: Union[Tuple[GeneDefinition[GenesType], ...], GeneDefinition[GenesType]],
+        self, genes: Union[Sequence[GeneDefinition[int]], GeneDefinition[int]]
     ):
-        super().__init__(genes, genes_holder=Tree.from_values)
+        _genes = [genes] if isinstance(genes, GeneDefinition) else genes
+        self.genes = Tree.from_values(_genes)
+
+    def build(self) -> Tree[int]:
+        return Tree.from_values(i.generate() for i in self.genes)
+
+    def build_individual_from_genes_values(self, it: Iterable[int]) -> Tree[int]:
+        return Tree.from_values(i for i in it)
+
+    def _update_genes(self, gene: GeneDefinition[int]) -> Tree[GeneDefinition[int]]:
+        return Tree.from_values(tuple(iter(self.genes)) + (gene,))
+
+    def __iter__(self):
+        return iter(self.genes)
 
 
 def tree_structure(nodes: int):
@@ -107,12 +135,18 @@ def tree_structure(nodes: int):
 
 def find_binary_tree():
     eva = (
-        EvolutionaryAlgorithm(population_size=200, generations=2000, elite_ratio=0.05)
-        .define_individual_structure(tree_structure(30))
-        .define_selector(Tournament(tournament_size=3, selection_size=50))
-        .initialize()
+        EvolutionaryAlgorithmBuilder(
+            population_size=200,
+            generations=2000,
+            elite_size=10,
+            individual_structure=tree_structure(30),
+        )
+        .selector(Tournament(tournament_size=3, selection_size=50))
+        .add_operator(MutationOperator, 0.1)
+        .add_operator(OnePointCrossoverOperator, 0.08)
+        .initialize(evaluate_binary_search_tree)
     )
-    result, score = eva.run(evaluate_binary_search_tree)
+    result, score = eva.run()
     print(f"result is binary search tree? {_is_bst(result)}, {score}")
     all_values = tuple(i for i in result)
     print(f"average value is {sum(all_values)/len(all_values)}")

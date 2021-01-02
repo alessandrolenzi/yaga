@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar, Iterable, Protocol, Callable, Iterator
-
-from typing_extensions import Final
+from typing import Generic, TypeVar, Iterable, Iterator
 
 from evolutionary_programming.genes.gene_definition import GeneDefinition
 
@@ -10,45 +8,24 @@ class InvalidIndividual(ValueError):
     pass
 
 
-G = TypeVar("G", covariant=True)
+IndividualType = TypeVar("IndividualType")
+GeneType = TypeVar("GeneType")
 
 
-class IndividualType(Protocol[G], Iterable[G]):
-    ...
-
-
-T = TypeVar("T")
-Q = TypeVar("Q")
-
-
-class IndividualStructure(Generic[G], ABC):
+class IndividualStructure(Generic[IndividualType, GeneType], ABC):
     """
     Defines the structure of a class of individuals (problem solutions) through its genes.
-
-    :param  Callable[[Iterable[G]], IndividualType[G]] genes_holder: method to generate the concrete representation of an individual from an iterable
     """
 
-    def __init__(self, genes_holder: Callable[[Iterable[G]], IndividualType[G]]):
-        self._gene_holder: Final = genes_holder
-
-    def __len__(self):
-        """ Dimensions of the solution"""
-        ...
-
     @abstractmethod
-    def __getitem__(self, pos: int) -> GeneDefinition[G]:
-        """ Returns gene identified by pos"""
-        ...
-
-    @abstractmethod
-    def __iter__(self) -> Iterator[GeneDefinition[G]]:
-        ...
-
-    def build(self) -> IndividualType[G]:
+    def build(self) -> IndividualType:
         """ Generates a specific individual of this class."""
-        return self._gene_holder(g.generate() for g in iter(self))
+        pass
 
-    def build_individual_from_genes_values(self, it: Iterable[G]) -> IndividualType[G]:
+    @abstractmethod
+    def build_individual_from_genes_values(
+        self, it: Iterable[GeneType]
+    ) -> IndividualType:
         """Generates an individual starting from provided values
 
         Specifically, element in the iterable at position i will correspond to the value
@@ -56,4 +33,8 @@ class IndividualStructure(Generic[G], ABC):
 
         :param Iterable[G] it: iterable of values of the genes composing the individual to be built.
         """
-        return self._gene_holder(it)
+        pass
+
+    @abstractmethod
+    def __iter__(self) -> Iterator[GeneDefinition[GeneType]]:
+        ...

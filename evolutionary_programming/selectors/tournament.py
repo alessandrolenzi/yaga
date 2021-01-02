@@ -1,17 +1,19 @@
 import random
-from typing import Sequence, Tuple, Iterable
+from typing import Sequence, Tuple, Iterable, Generic, TypeVar
 
 from evolutionary_programming.details import Comparable
-from evolutionary_programming.selectors.selector import Selector, IndividualType
+from evolutionary_programming.selectors.selector import IndividualType
+
+ScoreType = TypeVar("ScoreType", bound=Comparable)
 
 
-class Tournament(Selector[IndividualType, Comparable]):
+class Tournament(Generic[IndividualType, ScoreType]):
     def __init__(self, *, tournament_size: int, selection_size: int):
-        super().__init__(selection_size)
         self.tournament_size = tournament_size
+        self.selection_size = selection_size
 
     def __call__(
-        self, population: Sequence[Tuple[IndividualType, Comparable]]
+        self, population: Sequence[Tuple[IndividualType, ScoreType]]
     ) -> Iterable[IndividualType]:
         for i in range(self.selection_size):
             tournament_individuals = [

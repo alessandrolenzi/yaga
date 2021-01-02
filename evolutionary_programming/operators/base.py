@@ -9,9 +9,12 @@ class InvalidOperatorError(ValueError):
     pass
 
 
-G = TypeVar("G")
+IndividualType = TypeVar("IndividualType")
+GeneType = TypeVar("GeneType")
 
 
-class GeneticOperator(Generic[G]):
-    def __init__(self, individual_structure: IndividualStructure[G]):
+class GeneticOperator(Generic[IndividualType, GeneType]):
+    def __init__(
+        self, individual_structure: IndividualStructure[IndividualType, GeneType]
+    ):
         self.individual_structure: Final = individual_structure

@@ -1,7 +1,13 @@
-from evolutionary_programming.evolutionary_algorithm import EvolutionaryAlgorithm
+from evolutionary_programming.builder import EvolutionaryAlgorithmBuilder
 from evolutionary_programming.genes import IntGene, FloatGene, CharGene
 from evolutionary_programming.individuals.mixed_individual import (
     MixedIndividualStructure,
+)
+from evolutionary_programming.operators.multiple_individuals.crossover.one_point import (
+    OnePointCrossoverOperator,
+)
+from evolutionary_programming.operators.single_individual.mutation import (
+    MutationOperator,
 )
 from evolutionary_programming.selectors.tournament import Tournament
 
@@ -17,19 +23,26 @@ def evaluation(individual):
 
 
 def test_mixed_individual():
-    eva = (
-        EvolutionaryAlgorithm(population_size=200, generations=2000, elite_ratio=0.05)
-        .define_individual_structure(
-            MixedIndividualStructure(FloatGene(lower_bound=0, upper_bound=1))
-            .add_gene(FloatGene(lower_bound=0, upper_bound=1))
-            .add_gene(IntGene(lower_bound=0, upper_bound=129))
-            .add_gene(CharGene())
-            .add_gene(CharGene())
-        )
-        .define_selector(Tournament(tournament_size=3, selection_size=50))
-        .initialize()
+    individual_structure = (
+        MixedIndividualStructure(FloatGene(lower_bound=0, upper_bound=1))
+        .add_gene(FloatGene(lower_bound=0, upper_bound=1))
+        .add_gene(IntGene(lower_bound=0, upper_bound=129))
+        .add_gene(CharGene())
+        .add_gene(CharGene())
     )
-    eva.run(evaluation)
+    eva = (
+        EvolutionaryAlgorithmBuilder(
+            population_size=200,
+            generations=2000,
+            elite_size=10,
+            individual_structure=individual_structure,
+        )
+        .selector(Tournament(tournament_size=3, selection_size=50))
+        .add_operator(MutationOperator, 0.01)
+        .add_operator(OnePointCrossoverOperator, 0.8)
+        .initialize(evaluation)
+    )
+    eva.run()
 
 
 if __name__ == "__main__":

@@ -24,14 +24,15 @@ def evaluate(ind: Sequence[str]):
 
 def find_the_string():
     eva = (
-        EvolutionaryAlgorithmBuilder(population_size=100, generations=600)
-        .individual_structure(
-            UniformIndividualStructure(
+        EvolutionaryAlgorithmBuilder(
+            population_size=100,
+            generations=600,
+            individual_structure=UniformIndividualStructure(
                 tuple(
                     CharGene(allowed_characters=string.ascii_lowercase + " ")
                     for _ in range(len(to_find))
                 )
-            )
+            ),
         )
         .selector(Tournament(tournament_size=3, selection_size=10))
         .add_operator(OnePointCrossoverOperator, 0.8)

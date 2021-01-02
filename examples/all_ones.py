@@ -1,7 +1,16 @@
 from typing import Sequence
 
+from evolutionary_programming.operators.multiple_individuals.crossover.one_point import (
+    OnePointCrossoverOperator,
+)
+from evolutionary_programming.operators.single_individual.mutation import (
+    MutationOperator,
+)
+from evolutionary_programming.selectors.stochastic_universal_sampling import (
+    StochasticUniversalSampling,
+)
+
 from genetic_algorithm.binary import Binary as BinaryGeneticAlgorithm
-from evolutionary_programming.selectors.tournament import Tournament
 
 
 def evaluate_ones(ind: Sequence[bool]):
@@ -9,17 +18,19 @@ def evaluate_ones(ind: Sequence[bool]):
 
 
 def all_ones():
-    algo = BinaryGeneticAlgorithm(
-        genes=30,
-        population_size=100,
-        selector=Tournament(tournament_size=2, selection_size=20),
-        crossover_probability=0.8,
-        mutation_probability=0.5,
-        elite_ratio=0.04,
-        generations=100,
+    algo = (
+        BinaryGeneticAlgorithm(
+            solution_size=30,
+            population_size=100,
+            generations=800,
+        )
+        .add_operator(MutationOperator, 0.01)
+        .add_operator(OnePointCrossoverOperator, 0.8)
+        .selector(StochasticUniversalSampling(selection_size=20))
+        .initialize(evaluate_ones)
     )
-    algo.initialize()
-    print(algo.run(evaluation_function=evaluate_ones))
+
+    algo.run()
 
 
 if __name__ == "__main__":

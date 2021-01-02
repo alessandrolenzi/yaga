@@ -1,11 +1,11 @@
 import random
-from typing import Iterable, Sequence
-from evolutionary_programming.selectors.selector import IndividualType, Selector
+from typing import Iterable, Sequence, Tuple
+from evolutionary_programming.selectors.selector import IndividualType, Selector, T
 
 
-class Random(Selector[IndividualType]):
+class Random(Selector):
     def __call__(
-        self, population: Sequence[IndividualType]
+        self, population: Sequence[Tuple[IndividualType, T]]
     ) -> Iterable[IndividualType]:
         unique_indexes = set(
             random.randint(0, len(population) - 1) for _ in range(self.selection_size)

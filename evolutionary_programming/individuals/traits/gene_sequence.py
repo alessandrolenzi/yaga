@@ -1,13 +1,12 @@
 from collections import abc
 from typing import Union, Tuple, TypeVar, Sequence, Generic, Iterator
-from typing_extensions import Final
 
 T = TypeVar("T")
 
 
 class GeneSequenceTrait(Generic[T]):
     def __init__(self, genes: Union[Sequence[T], T]):
-        self.genes: Final[Tuple[T, ...]] = self._to_tuple(genes)
+        self.genes: Tuple[T, ...] = self._to_tuple(genes)
 
     def _update_genes(self, gene: T) -> Tuple[T, ...]:
         return self.genes + (gene,)

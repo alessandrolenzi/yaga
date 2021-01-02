@@ -1,27 +1,22 @@
-from abc import ABC, abstractmethod
 from typing import (
-    Generic,
     Sequence,
     Tuple,
     Iterable,
-    Final,
-    Protocol,
     TypeVar,
-    Callable,
+    Protocol,
+    Final,
 )
 
 from evolutionary_programming.details import Comparable
-from evolutionary_programming.individuals.individual_structure import IndividualType, G
 
-T = TypeVar("T", bound=Comparable)
+T = TypeVar("T", bound=Comparable, contravariant=True)
+IndividualType = TypeVar("IndividualType")
 
 
-class Selector(Generic[G, T]):
-    def __init__(self, selection_size: int):
-        self.selection_size = selection_size
+class Selector(Protocol[IndividualType, T]):
+    selection_size: int
 
-    @abstractmethod
     def __call__(
-        self, population: Sequence[Tuple[IndividualType[G], T]]
-    ) -> Iterable[IndividualType[G]]:
+        self, population: Sequence[Tuple[IndividualType, T]]
+    ) -> Iterable[IndividualType]:
         ...

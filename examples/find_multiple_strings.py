@@ -2,7 +2,7 @@ import itertools
 import random
 from dataclasses import dataclass
 import string
-from typing import Sequence, Optional, Iterable
+from typing import Sequence, Optional, Iterable, Any, Tuple, List
 
 from evolutionary_programming.builder import EvolutionaryAlgorithmBuilder
 from evolutionary_programming.genes import CharGene, GeneDefinition
@@ -11,7 +11,6 @@ from evolutionary_programming.individuals import (
     IndividualType,
 )
 from evolutionary_programming.individuals.individual_structure import (
-    G,
     IndividualStructure,
 )
 from evolutionary_programming.operators.multiple_individuals.base import (
@@ -33,7 +32,10 @@ class ComparableScore:
     subscores: Sequence[float]
     fullMatch: float
 
-    def __eq__(self: "ComparableScore", other: "ComparableScore") -> bool:
+    def __eq__(self: "ComparableScore", other: Any) -> bool:
+        if not isinstance(other, ComparableScore):
+            return NotImplemented
+
         return self.fullMatch == other.fullMatch and self.subscores == other.subscores
 
     def __lt__(self: "ComparableScore", other: "ComparableScore") -> bool:
@@ -75,37 +77,19 @@ class RandomStringGene(GeneDefinition[str]):
 
 
 class OneCharMutationOperator(MutationOperator[str]):
-    @classmethod
-    def _apply_mutation(
-        cls,
-        individual_structure: IndividualStructure[str],
-        individual: IndividualType[str],
-    ) -> IndividualType[str]:
-        mutated_gene = random.randint(0, len(individual_structure) - 1)
-        return individual_structure.build_individual_from_genes_values(
-            itertools.chain(
-                itertools.islice(individual, mutated_gene),
-                [
-                    cls._mutate_one_char(
-                        individual_structure[mutated_gene], individual[mutated_gene]
-                    )
-                ],
-                itertools.islice(individual, mutated_gene + 1, None),
+    def _make_mutation(self, gene: GeneDefinition[str], gene_value: str) -> str:
+        if isinstance(gene, RandomStringGene):
+            mutated_char = random.randint(0, gene.length - 1)
+            return (
+                gene_value[:mutated_char]
+                + gene.genes[mutated_char].generate()
+                + gene_value[mutated_char + 1 :]
             )
-        )
-
-    @classmethod
-    def _mutate_one_char(cls, gene: RandomStringGene, individual: str) -> str:
-        mutated_char = random.randint(0, gene.length - 1)
-        return (
-            individual[:mutated_char]
-            + gene.genes[mutated_char].generate()
-            + individual[mutated_char + 1 :]
-        )
+        return super()._make_mutation(gene, gene_value)
 
 
-class PickBest(MultipleIndividualOperator):
-    def __call__(self, it: Iterable[IndividualType[G]]) -> IndividualType[G]:
+class PickBest(MultipleIndividualOperator[Tuple[str, ...], str]):
+    def __call__(self, it: Iterable[Tuple[str, ...]]) -> Tuple[str, ...]:
         l = list(it)
         scored_l = list(map(evaluate, l))
         first = list(l.pop(0))
@@ -114,22 +98,25 @@ class PickBest(MultipleIndividualOperator):
             for index, comp in enumerate(ind):
                 if first_score.subscores[index] < score.subscores[index]:
                     first[index] = comp
-                    first_score.subscores[index] = score.subscores[index]
+                    prev_scores = list(first_score.subscores)
+                    prev_scores[index] = score.subscores[index]
+                    first_score.subscores = prev_scores
         return tuple(first)
 
 
 def find_multiple_strings():
     eva = (
-        EvolutionaryAlgorithmBuilder(population_size=100, generations=1000)
-        .individual_structure(
-            UniformIndividualStructure(
+        EvolutionaryAlgorithmBuilder(
+            population_size=100,
+            generations=1000,
+            individual_structure=UniformIndividualStructure(
                 tuple(
                     RandomStringGene(
                         allowed_characters=string.ascii_lowercase + " ", length=len(sub)
                     )
                     for sub in to_find
                 )
-            )
+            ),
         )
         .selector(Tournament(tournament_size=3, selection_size=40))
         .add_operator(OnePointCrossoverOperator, 0.8)

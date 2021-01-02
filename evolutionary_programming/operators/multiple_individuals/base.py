@@ -1,14 +1,11 @@
 from abc import abstractmethod
 from typing import Iterable
 
-from evolutionary_programming.individuals.individual_structure import (
-    G,
-    IndividualType,
-)
-from evolutionary_programming.operators.base import GeneticOperator
+from evolutionary_programming.individuals import IndividualType
+from evolutionary_programming.operators.base import GeneticOperator, GeneType
 
 
-class MultipleIndividualOperator(GeneticOperator[G]):
+class MultipleIndividualOperator(GeneticOperator[IndividualType, GeneType]):
     @abstractmethod
-    def __call__(self, it: Iterable[IndividualType[G]]) -> IndividualType[G]:
+    def __call__(self, it: Iterable[IndividualType]) -> IndividualType:
         ...

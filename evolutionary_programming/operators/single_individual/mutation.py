@@ -1,19 +1,24 @@
-import itertools
 import random
+from typing import List, Tuple, Generic, TypeVar, cast, Iterable
 
 from typing_extensions import Final
 
-from evolutionary_programming.individuals import IndividualStructure, IndividualType
-from evolutionary_programming.individuals.individual_structure import G
+from evolutionary_programming.genes import GeneDefinition
+from evolutionary_programming.individuals import IndividualStructure
+from evolutionary_programming.operators.protocols import IterableIndividualType
 from evolutionary_programming.operators.single_individual.base import (
     SingleIndividualOperator,
 )
-from evolutionary_programming.operators.base import InvalidOperatorError
+from evolutionary_programming.operators.base import InvalidOperatorError, GeneType
+
+T = TypeVar("T")
 
 
-class MutationOperator(SingleIndividualOperator[G]):
+class MutationOperator(SingleIndividualOperator[IterableIndividualType[T], T]):
     def __init__(
-        self, individual_structure: IndividualStructure[G], genes_to_mutate: int = 1
+        self,
+        individual_structure: IndividualStructure[IterableIndividualType[T], T],
+        genes_to_mutate: int = 1,
     ):
         super().__init__(individual_structure)
         if genes_to_mutate < 1:
@@ -22,21 +27,26 @@ class MutationOperator(SingleIndividualOperator[G]):
             )
         self.genes_to_mutate: Final = genes_to_mutate
 
-    def __call__(self, _individual: IndividualType[G]) -> IndividualType[G]:
-        individual = self._apply_mutation(self.individual_structure, _individual)
-        for _ in range(self.genes_to_mutate - 1):
-            individual = self._apply_mutation(self.individual_structure, individual)
-        return individual
+    def __call__(
+        self, _individual: IterableIndividualType[T]
+    ) -> IterableIndividualType[T]:
+        mutations: List[Tuple[int, T]] = []
+        fenotype: List[T] = []
+        for pos, (gene_definition, value) in enumerate(
+            zip(self.individual_structure, _individual)
+        ):
+            if pos < self.genes_to_mutate:
+                mutations.append((pos, value))
+                fenotype.append(self._make_mutation(gene_definition, value))
+                continue
+            r = random.randint(0, pos)
+            if r < self.genes_to_mutate:
+                fenotype[mutations[r][0]] = mutations[r][1]
+                mutations[r] = (pos, value)
+                fenotype.append(self._make_mutation(gene_definition, value))
+                continue
+            fenotype.append(value)
+        return self.individual_structure.build_individual_from_genes_values(fenotype)
 
-    @classmethod
-    def _apply_mutation(
-        cls, individual_structure: IndividualStructure[G], individual: IndividualType[G]
-    ) -> IndividualType[G]:
-        mutation_point = random.randint(0, len(individual_structure) - 1)
-        return individual_structure.build_individual_from_genes_values(
-            itertools.chain(
-                itertools.islice(individual, mutation_point),
-                [individual_structure[mutation_point].generate()],
-                itertools.islice(individual, mutation_point + 1, None),
-            )
-        )
+    def _make_mutation(self, gene_definition: GeneDefinition[T], _value: T) -> T:
+        return gene_definition.generate()
