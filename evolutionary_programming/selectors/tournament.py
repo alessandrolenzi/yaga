@@ -16,11 +16,16 @@ class Tournament(Generic[IndividualType, ScoreType]):
         self, population: Sequence[Tuple[IndividualType, ScoreType]]
     ) -> Iterable[IndividualType]:
         for i in range(self.selection_size):
-            tournament_individuals = [
-                population[random.randint(0, len(population) - 1)]
-                for _ in range(self.tournament_size)
-            ]
+            tournament_individuals = self.pick_tournament_individuals(population)
             yield max(
                 tournament_individuals,
                 key=lambda individual_with_score: individual_with_score[1],
             )[0]
+
+    def pick_tournament_individuals(
+        self, population: Sequence[Tuple[IndividualType, ScoreType]]
+    ) -> Sequence[Tuple[IndividualType, ScoreType]]:
+        return [
+            population[random.randint(0, len(population) - 1)]
+            for _ in range(self.tournament_size)
+        ]
