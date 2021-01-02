@@ -1,13 +1,17 @@
-from typing import Iterable, Sequence, Tuple
+from typing import Iterable, Sequence, Tuple, TypeVar, Generic
 
-from evolutionary_programming.selectors.selector import Selector, IndividualType, T
+from evolutionary_programming.details import Comparable
+from evolutionary_programming.individuals import IndividualType
+
+ScoreType = TypeVar("ScoreType", bound=Comparable)
 
 
-class Ranking(Selector):
+class Ranking(Generic[IndividualType, ScoreType]):
+    def __init__(self, selection_size: int):
+        self.selection_size = selection_size
+
     def __call__(
-        self, population: Sequence[Tuple[IndividualType, T]]
+        self, population: Sequence[Tuple[IndividualType, ScoreType]]
     ) -> Iterable[IndividualType]:
-        for i in sorted(population, key=lambda x: x[1], reverse=True)[
-            : self.selection_size
-        ]:
+        for i in population[: self.selection_size]:
             yield i[0]
