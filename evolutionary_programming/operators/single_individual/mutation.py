@@ -37,16 +37,16 @@ class MutationOperator(SingleIndividualOperator[IterableIndividualType[T], T]):
         ):
             if pos < self.genes_to_mutate:
                 mutations.append((pos, value))
-                fenotype.append(self._make_mutation(gene_definition, value))
+                fenotype.append(self.make_mutation(gene_definition, value))
                 continue
             r = random.randint(0, pos)
             if r < self.genes_to_mutate:
                 fenotype[mutations[r][0]] = mutations[r][1]
                 mutations[r] = (pos, value)
-                fenotype.append(self._make_mutation(gene_definition, value))
+                fenotype.append(self.make_mutation(gene_definition, value))
                 continue
             fenotype.append(value)
         return self.individual_structure.build_individual_from_genes_values(fenotype)
 
-    def _make_mutation(self, gene_definition: GeneDefinition[T], _value: T) -> T:
+    def make_mutation(self, gene_definition: GeneDefinition[T], _value: T) -> T:
         return gene_definition.generate()

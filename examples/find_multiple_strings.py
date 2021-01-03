@@ -77,7 +77,7 @@ class RandomStringGene(GeneDefinition[str]):
 
 
 class OneCharMutationOperator(MutationOperator[str]):
-    def _make_mutation(self, gene: GeneDefinition[str], gene_value: str) -> str:
+    def make_mutation(self, gene: GeneDefinition[str], gene_value: str) -> str:
         if isinstance(gene, RandomStringGene):
             mutated_char = random.randint(0, gene.length - 1)
             return (
@@ -85,7 +85,7 @@ class OneCharMutationOperator(MutationOperator[str]):
                 + gene.genes[mutated_char].generate()
                 + gene_value[mutated_char + 1 :]
             )
-        return super()._make_mutation(gene, gene_value)
+        return super().make_mutation(gene, gene_value)
 
 
 class PickBest(MultipleIndividualOperator[Tuple[str, ...], str]):
