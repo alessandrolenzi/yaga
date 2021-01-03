@@ -9,7 +9,7 @@ from typing import (
 
 from evolutionary_programming.evolutionary_algorithm import (
     GeneType,
-    EvolutionaryAlgorithmInstance,
+    EvolutionaryAlgorithm,
 )
 from evolutionary_programming.individuals import IndividualStructure
 from evolutionary_programming.operators.base import GeneticOperator
@@ -62,7 +62,7 @@ class EvolutionaryAlgorithmBuilder(Generic[IndividualType, GeneType]):
             multiple_individual_operators,
             single_individual_operators,
         ) = self._prepare_operators()
-        return EvolutionaryAlgorithmInstance(
+        return EvolutionaryAlgorithm(
             population_size=self.population_size,
             generations=self.generations,
             individual_structure=self._indstr,

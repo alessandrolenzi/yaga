@@ -1,3 +1,4 @@
+import itertools
 import random
 from typing import TypeVar, Generic, Sequence, Tuple, List, Iterable, Iterator
 
@@ -16,7 +17,7 @@ GeneType = TypeVar("GeneType")
 T = TypeVar("T", bound=Comparable)
 
 
-class EvolutionaryAlgorithmInstance(Generic[IndividualType, GeneType, T]):
+class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, T]):
     def __init__(
         self,
         *,
@@ -44,9 +45,21 @@ class EvolutionaryAlgorithmInstance(Generic[IndividualType, GeneType, T]):
         self.iterations = 0
         self.population: List[IndividualType] = []
 
-    def run(self):
+    def set_initial_population(
+        self, initial_population_iterator: Iterable[IndividualType]
+    ):
+        self.population = []
+        for individual in initial_population_iterator:
+            if len(self.population) == self.population_size:
+                return
+            self.population.append(individual)
+
+    def ensure_population_initialized(self):
         while len(self.population) < self.population_size:
             self.population.append(self.individual_structures.build())
+
+    def run(self):
+        self.ensure_population_initialized()
         while not self._should_stop():
             self.population = list(self._new_generation(self.population))
 
