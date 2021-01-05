@@ -60,17 +60,22 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, T]):
 
     def run(self):
         self.ensure_population_initialized()
+        self.ranker.rank(self.population)
         while not self._should_stop():
-            self.population = list(self._new_generation(self.population))
+            selected = list(self.selector(self.ranker.ranked_population))
+            self.population = self.pick_elites(self.ranker.ranked_population)
+            self.population += list(self._new_generation(selected))
+            self.ranker.rank(self.population)
+
+        return self.ranker.ranked_population[0]
+
+
+    def pick_elites(self, ranked_population: Sequence[Tuple[IndividualType, T]]):
+        return [individual[0] for individual in ranked_population[: self.elite_size]]
 
     def _new_generation(
-        self, population: Iterable[IndividualType]
+        self, parents: Sequence[IndividualType]
     ) -> Iterator[IndividualType]:
-        ranked_population = self.ranker.rank(population)
-        parents = list(self.selector(ranked_population))
-        print(f"the best is {ranked_population[0]}")
-        for i in ranked_population[: self.elite_size]:
-            yield i[0]
         for _ in range(self.population_size - self.elite_size):
             yield self._generate_individual(parents)
 

@@ -16,12 +16,14 @@ class Ranker(Generic[IndividualType, Q]):
         self.ranked_population: Sequence[Tuple[IndividualType, Q]] = []
 
     def rank(self, it: Iterable[IndividualType]) -> Sequence[Tuple[IndividualType, Q]]:
-        self.ranked_population = list(self._evaluate(it))
-        return sorted(
-            self.ranked_population,
-            key=lambda scored_individual: scored_individual[1],
-            reverse=True,
+        self.ranked_population = list(
+            sorted(
+                self._evaluate(it),
+                key=lambda scored_individual: scored_individual[1],
+                reverse=True,
+            )
         )
+        return self.ranked_population
 
     def _evaluate(
         self, it: Iterable[IndividualType]
