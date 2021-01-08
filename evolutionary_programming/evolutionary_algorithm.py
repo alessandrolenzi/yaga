@@ -1,6 +1,15 @@
-import itertools
 import random
-from typing import TypeVar, Generic, Sequence, Tuple, List, Iterable, Iterator
+from typing import (
+    TypeVar,
+    Generic,
+    Sequence,
+    Tuple,
+    List,
+    Iterable,
+    Iterator,
+    Optional,
+    Callable,
+)
 
 from evolutionary_programming.details import Comparable
 from evolutionary_programming.individuals import IndividualStructure
@@ -32,7 +41,7 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, T]):
         single_individual_operators: Sequence[
             Tuple[SingleIndividualOperator[IndividualType, GeneType], float]
         ],
-        elite_size: int = 0,
+        elite_size: int = 0
     ):
         self.population_size = population_size
         self.generations = generations
@@ -66,9 +75,7 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, T]):
             self.population = self.pick_elites(self.ranker.ranked_population)
             self.population += list(self._new_generation(selected))
             self.ranker.rank(self.population)
-
         return self.ranker.ranked_population[0]
-
 
     def pick_elites(self, ranked_population: Sequence[Tuple[IndividualType, T]]):
         return [individual[0] for individual in ranked_population[: self.elite_size]]

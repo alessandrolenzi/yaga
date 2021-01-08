@@ -1,3 +1,4 @@
+import itertools
 from concurrent.futures._base import Executor
 from typing import Generic, Optional, Sequence, Tuple, Iterable, TypeVar, Callable
 from evolutionary_programming.details import Comparable
@@ -28,5 +29,9 @@ class Ranker(Generic[IndividualType, Q]):
     def _evaluate(
         self, it: Iterable[IndividualType]
     ) -> Iterable[Tuple[IndividualType, Q]]:
-        for i in it:
-            yield i, self.evaluation_function(i)
+        if not self.executor:
+            for i in it:
+                yield i, self.evaluation_function(i)
+        else:
+            i1, i2 = itertools.tee(it)
+            yield from zip(i1, self.executor.map(self.evaluation_function, i2))
