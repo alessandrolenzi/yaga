@@ -1,12 +1,11 @@
 from abc import abstractmethod
-from functools import singledispatch
 from typing import Iterable, List, cast
 
 from typing_extensions import Final
 
 from evolutionary_programming.individuals import IndividualType, IndividualStructure
 from evolutionary_programming.operators.base import GeneticOperator, GeneType
-from evolutionary_programming.utils.reservoir_sampling import random_selection
+from evolutionary_programming.utils.random_selection import random_selection
 
 
 class MultipleIndividualOperator(GeneticOperator[IndividualType, GeneType]):
