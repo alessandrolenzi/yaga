@@ -17,6 +17,6 @@ def test_one_point_crossover(crossover_point):
     ind2 = individual_structure.build()
     operator = OnePointCrossoverOperator(individual_structure)
     expect(operator).crossover_point.once().and_return(crossover_point)
-    child = operator([ind1, ind2])
+    child = operator(ind1, [ind2])
     assert child[0:crossover_point] == ind1[0:crossover_point]
     assert child[crossover_point:] == ind2[crossover_point:]

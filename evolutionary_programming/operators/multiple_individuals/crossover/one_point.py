@@ -14,14 +14,16 @@ class OnePointCrossoverOperator(
     MultipleIndividualOperator[IterableIndividualType[GeneType], GeneType]
 ):
     def __call__(
-        self, _parents: Iterable[IterableIndividualType[GeneType]]
+        self,
+        base_individual: IterableIndividualType[GeneType],
+        _parents: Iterable[IterableIndividualType[GeneType]],
     ) -> IterableIndividualType[GeneType]:
-        _parent1, _parent2 = self.pick(_parents)
-        _parent1_sequence = [i for i in _parent1]
+        parent1, parent2 = self.pick(base_individual, _parents)
+        _parent1_sequence = [i for i in parent1]
         crossover_point = self.crossover_point(_parent1_sequence)
         serialised_individual = itertools.chain(
             itertools.islice(_parent1_sequence, crossover_point),
-            itertools.islice(_parent2, crossover_point, None),
+            itertools.islice(parent2, crossover_point, None),
         )
         return self.individual_structure.build_individual_from_genes_values(
             serialised_individual
@@ -29,8 +31,3 @@ class OnePointCrossoverOperator(
 
     def crossover_point(self, individual: Sequence[GeneType]) -> int:
         return random.randint(0, len(individual) - 1)
-
-    def pick(
-        self, it: Iterable[IterableIndividualType[GeneType]]
-    ) -> Sequence[IterableIndividualType[GeneType]]:
-        return list(itertools.islice(it, 2))

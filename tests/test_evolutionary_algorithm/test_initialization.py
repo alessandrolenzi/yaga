@@ -26,7 +26,6 @@ def test_ensure_initial_population_generates_right_number_of_individuals(
 def test_ensure_run_initialises_population(
     default_evolutionary_algorithm: EvolutionaryAlgorithm,
 ):
-    expect(default_evolutionary_algorithm)._should_stop.once().and_return(True)
     default_evolutionary_algorithm.run()
     assert (
         len(default_evolutionary_algorithm.population)

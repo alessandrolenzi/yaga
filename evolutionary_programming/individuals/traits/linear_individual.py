@@ -1,4 +1,4 @@
-from typing import TypeVar, Generic, Iterable, Tuple, Final, Sequence
+from typing import TypeVar, Generic, Iterable, Tuple, Sequence
 
 from evolutionary_programming.genes import GeneDefinition
 

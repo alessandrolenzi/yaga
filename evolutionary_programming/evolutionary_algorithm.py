@@ -31,7 +31,7 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, T]):
         self,
         *,
         population_size: int,
-        generations: int,
+        generations: Optional[int],
         selector: Selector,
         ranker: Ranker[IndividualType, T],
         individual_structure: IndividualStructure[IndividualType, GeneType],
@@ -41,8 +41,17 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, T]):
         single_individual_operators: Sequence[
             Tuple[SingleIndividualOperator[IndividualType, GeneType], float]
         ],
-        elite_size: int = 0
+        elite_size: int = 0,
     ):
+        if population_size <= 0:
+            raise ValueError(
+                f"Invalid configuration: population size must be greather than 0. Specified {population_size}"
+            )
+        if generations is not None and generations <= 0:
+            raise ValueError(
+                f"Invalid configuration: cannot run for less than a generation. Specified {generations}"
+            )
+
         self.population_size = population_size
         self.generations = generations
         self.ranker = ranker
@@ -69,13 +78,15 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, T]):
 
     def run(self):
         self.ensure_population_initialized()
-        self.ranker.rank(self.population)
         while not self._should_stop():
-            selected = list(self.selector(self.ranker.ranked_population))
-            self.population = self.pick_elites(self.ranker.ranked_population)
-            self.population += list(self._new_generation(selected))
-            self.ranker.rank(self.population)
+            self.perform_iteration()
         return self.ranker.ranked_population[0]
+
+    def perform_iteration(self):
+        self.ranker.rank(self.population)
+        selected = list(self.selector(self.ranker.ranked_population))
+        self.population = self.pick_elites(self.ranker.ranked_population)
+        self.population += list(self._new_generation(selected))
 
     def pick_elites(self, ranked_population: Sequence[Tuple[IndividualType, T]]):
         return [individual[0] for individual in ranked_population[: self.elite_size]]
@@ -90,9 +101,7 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, T]):
         individual = parents[random.randint(0, len(parents) - 1)]
         for m_op, probability in self.multiple_individual_operator:
             if random.random() < probability:
-                individual = m_op(
-                    [individual, parents[random.randint(0, len(parents) - 1)]]
-                )
+                individual = m_op(individual, parents)
         for s_op, probability in self.single_individual_operator:
             if random.random() < probability:
                 individual = s_op(individual)
@@ -101,4 +110,4 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, T]):
 
     def _should_stop(self):
         self.iterations += 1
-        return self.iterations >= self.generations
+        return self.generations is not None and self.iterations > self.generations

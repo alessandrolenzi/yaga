@@ -12,6 +12,7 @@ from evolutionary_programming.individuals import (
 )
 from evolutionary_programming.individuals.individual_structure import (
     IndividualStructure,
+    GeneType,
 )
 from evolutionary_programming.operators.multiple_individuals.base import (
     MultipleIndividualOperator,
@@ -89,15 +90,21 @@ class OneCharMutationOperator(MutationOperator[str]):
 
 
 class PickBest(MultipleIndividualOperator[Tuple[str, ...], str]):
-    def __call__(self, it: Iterable[Tuple[str, ...]]) -> Tuple[str, ...]:
-        l = list(it)
+    def __init__(self, individual_structure: IndividualStructure[Tuple[str, ...], str]):
+
+        super().__init__(individual_structure, arity=10)
+
+    def __call__(
+        self, first: Tuple[str, ...], it: Iterable[Tuple[str, ...]]
+    ) -> Tuple[str, ...]:
+        l = self.pick(first, it)
         scored_l = list(map(evaluate, l))
-        first = list(l.pop(0))
+        accumulated = list(l.pop(0))
         first_score = scored_l.pop(0)
         for ind, score in zip(l, scored_l):
             for index, comp in enumerate(ind):
                 if first_score.subscores[index] < score.subscores[index]:
-                    first[index] = comp
+                    accumulated[index] = comp
                     prev_scores = list(first_score.subscores)
                     prev_scores[index] = score.subscores[index]
                     first_score.subscores = prev_scores

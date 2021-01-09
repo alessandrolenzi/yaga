@@ -1,4 +1,3 @@
-import itertools
 from dataclasses import dataclass
 from typing import (
     TypeVar,
@@ -7,11 +6,10 @@ from typing import (
     Type,
     Iterable,
     Union,
-    Tuple,
     Iterator,
-    Final,
     Sequence,
 )
+from typing_extensions import Final
 
 from evolutionary_programming.builder import EvolutionaryAlgorithmBuilder
 from evolutionary_programming.genes.gene_definition import GeneDefinition
