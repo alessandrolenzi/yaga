@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 ScoreType = TypeVar("ScoreType", bound=Comparable)
 
 
-class EvolutionStatus(Generic[IndividualType, GeneType, ScoreType]):
+class AlgorithmHandle(Generic[IndividualType, GeneType, ScoreType]):
     def __init__(
         self,
         evolutionary_algorithm: "EvolutionaryAlgorithm[IndividualType, GeneType, ScoreType]",
@@ -34,3 +34,6 @@ class EvolutionStatus(Generic[IndividualType, GeneType, ScoreType]):
 
     def fittest_score(self):
         return self._evolutionary_algorithm.ranker.ranked_population[1]
+
+    def stop(self):
+        self._evolutionary_algorithm.stop()

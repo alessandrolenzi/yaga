@@ -2,6 +2,7 @@ from copy import copy
 
 from doubles import expect
 
+from evolutionary_programming.evolution_status import AlgorithmHandle
 from evolutionary_programming.evolutionary_algorithm import EvolutionaryAlgorithm
 from evolutionary_programming.genes import IntGene
 from evolutionary_programming.individuals import UniformIndividualStructure
@@ -177,3 +178,26 @@ def test_iteration_calls_two_multiple_individual_operator():
     )
     eva.run()
     assert eva._population[0] == (0,)
+
+
+def test_iterations_calls_callback():
+    counter = 0
+
+    def callback(_: AlgorithmHandle):
+        nonlocal counter
+        counter += 1
+
+    eva = EvolutionaryAlgorithm(
+        ranker=Ranker(lambda x: 1.0),
+        selector=Random(selection_size=1),
+        population_size=1,
+        generations=1,
+        individual_structure=UniformIndividualStructure(
+            IntGene(lower_bound=0, upper_bound=1)
+        ),
+        multiple_individual_operators=[],
+        single_individual_operators=[],
+        iteration_callbacks=[callback],
+    )
+    eva.run()
+    assert counter == 1
