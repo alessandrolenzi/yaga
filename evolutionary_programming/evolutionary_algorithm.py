@@ -16,6 +16,10 @@ from evolutionary_programming.individuals import IndividualStructure
 from evolutionary_programming.operators.multiple_individuals.base import (
     MultipleIndividualOperator,
 )
+from evolutionary_programming.operators.protocols import (
+    MultipleIndividualOperatorProtocol,
+    SingleIndividualOperatorProtocol,
+)
 from evolutionary_programming.operators.single_individual.base import (
     SingleIndividualOperator,
 )
@@ -36,10 +40,10 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, T]):
         ranker: Ranker[IndividualType, T],
         individual_structure: IndividualStructure[IndividualType, GeneType],
         multiple_individual_operators: Sequence[
-            Tuple[MultipleIndividualOperator[IndividualType, GeneType], float]
+            Tuple[MultipleIndividualOperatorProtocol[IndividualType], float]
         ],
         single_individual_operators: Sequence[
-            Tuple[SingleIndividualOperator[IndividualType, GeneType], float]
+            Tuple[SingleIndividualOperatorProtocol[IndividualType], float]
         ],
         elite_size: int = 0,
     ):

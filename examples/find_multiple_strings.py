@@ -97,7 +97,7 @@ class PickBest(MultipleIndividualOperator[Tuple[str, ...], str]):
     def __call__(
         self, first: Tuple[str, ...], it: Iterable[Tuple[str, ...]]
     ) -> Tuple[str, ...]:
-        l = self.pick(first, it)
+        l = self._pick(first, it)
         scored_l = list(map(evaluate, l))
         accumulated = list(l.pop(0))
         first_score = scored_l.pop(0)

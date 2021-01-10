@@ -23,7 +23,7 @@ class MultipleIndividualOperator(GeneticOperator[IndividualType, GeneType]):
     ) -> IndividualType:
         ...
 
-    def pick(
+    def _pick(
         self, selected: IndividualType, parents: Iterable[IndividualType]
     ) -> List[IndividualType]:
         return [selected] + cast(

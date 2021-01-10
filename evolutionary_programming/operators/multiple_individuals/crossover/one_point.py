@@ -18,7 +18,7 @@ class OnePointCrossoverOperator(
         base_individual: SequentialIndividualType[GeneType],
         _parents: Iterable[SequentialIndividualType[GeneType]],
     ) -> SequentialIndividualType[GeneType]:
-        parent1, parent2 = self.pick(base_individual, _parents)
+        parent1, parent2 = self._pick(base_individual, _parents)
         _parent1_sequence = [i for i in parent1]
         crossover_point = self.crossover_point(_parent1_sequence)
         serialised_individual = itertools.chain(
