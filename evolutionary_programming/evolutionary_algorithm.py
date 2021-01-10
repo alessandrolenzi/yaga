@@ -12,6 +12,7 @@ from typing import (
 )
 
 from evolutionary_programming.details import Comparable
+from evolutionary_programming.evolution_status import EvolutionStatus
 from evolutionary_programming.individuals import IndividualStructure
 from evolutionary_programming.operators.protocols import (
     MultipleIndividualOperatorProtocol,
@@ -40,7 +41,7 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, ScoreType]):
             Tuple[SingleIndividualOperatorProtocol[IndividualType], float]
         ],
         iteration_callbacks: Optional[
-            Sequence[Callable[["EvolutionaryAlgorithm"], None]]
+            Sequence[Callable[["EvolutionStatus"], None]]
         ] = None,
         elite_size: int = 0,
     ):
@@ -88,8 +89,9 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, ScoreType]):
         return self.ranker.ranked_population[0]
 
     def execute_callbacks(self):
+        status = EvolutionStatus(self)
         for callback in self.iterations_callback:
-            callback(self)
+            callback(status)
 
     def perform_iteration(self):
         self.ranker.rank(self._population)
