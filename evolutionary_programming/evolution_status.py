@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 ScoreType = TypeVar("ScoreType", bound=Comparable)
 
 
-class AlgorithmHandle(Generic[IndividualType, GeneType, ScoreType]):
+class EvolutionStatus(Generic[IndividualType, GeneType, ScoreType]):
     def __init__(
         self,
         evolutionary_algorithm: "EvolutionaryAlgorithm[IndividualType, GeneType, ScoreType]",
