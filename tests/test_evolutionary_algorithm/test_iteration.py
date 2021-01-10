@@ -30,8 +30,8 @@ def test_iteration_calls_ranker():
         single_individual_operators=[],
     )
     eva.run()
-    assert len(eva.population) == len(ranker.ranked_population)
-    assert set(eva.population) == set(r[0] for r in ranker.ranked_population)
+    assert len(eva._population) == len(ranker.ranked_population)
+    assert set(eva._population) == set(r[0] for r in ranker.ranked_population)
 
 
 def test_iteration_calls_selector():
@@ -49,7 +49,7 @@ def test_iteration_calls_selector():
     )
     expect(selector).__call__.once().and_return([(1,)])
     eva.run()
-    assert eva.population[0] == (1,)
+    assert eva._population[0] == (1,)
 
 
 def test_iteration_calls_single_individual_operators():
@@ -68,7 +68,7 @@ def test_iteration_calls_single_individual_operators():
     )
     expect(mutation_operator).__call__.once().and_return((1,))
     eva.run()
-    assert eva.population[0] == (1,)
+    assert eva._population[0] == (1,)
 
 
 def test_iteration_regenerates_right_sized_population():
@@ -84,7 +84,7 @@ def test_iteration_regenerates_right_sized_population():
         single_individual_operators=[],
     )
     eva.run()
-    assert len(eva.population) == 5
+    assert len(eva._population) == 5
 
 
 def test_iteration_preserves_elites():
@@ -108,8 +108,8 @@ def test_iteration_preserves_elites():
     # invert order, to make sure that we're indeed selecting the elites.
     eva.set_initial_population(ranker.ranked_population[-1:])
     eva.run()
-    assert eva.population[0] == (0,)
-    assert len(eva.population) == 5
+    assert eva._population[0] == (0,)
+    assert len(eva._population) == 5
 
 
 def test_iteration_calls_multiple_instances_of_single_individual_operator():
@@ -130,7 +130,7 @@ def test_iteration_calls_multiple_instances_of_single_individual_operator():
     expect(mutation_operator).__call__.once().and_return((1,))
     expect(mutation_operator_2).__call__.once().with_args((1,)).and_return((0,))
     eva.run()
-    assert eva.population[0] == (0,)
+    assert eva._population[0] == (0,)
 
 
 def test_iteration_calls_multiple_individual_operator():
@@ -149,7 +149,7 @@ def test_iteration_calls_multiple_individual_operator():
     )
     expect(crossover_operator).__call__.once().and_return((1,))
     eva.run()
-    assert eva.population[0] == (1,)
+    assert eva._population[0] == (1,)
 
 
 def test_iteration_calls_two_multiple_individual_operator():
@@ -176,4 +176,4 @@ def test_iteration_calls_two_multiple_individual_operator():
         (0,)
     )
     eva.run()
-    assert eva.population[0] == (0,)
+    assert eva._population[0] == (0,)
