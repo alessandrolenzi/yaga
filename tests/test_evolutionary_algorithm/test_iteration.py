@@ -2,7 +2,7 @@ from copy import copy
 
 from doubles import expect
 
-from evolutionary_programming.evolution_status import EvolutionStatus
+from evolutionary_programming.evolution import Evolution
 from evolutionary_programming.evolutionary_algorithm import EvolutionaryAlgorithm
 from evolutionary_programming.genes import IntGene
 from evolutionary_programming.individuals import UniformIndividualStructure
@@ -183,7 +183,7 @@ def test_iteration_calls_two_multiple_individual_operator():
 def test_iterations_calls_callback():
     counter = 0
 
-    def callback(_: EvolutionStatus):
+    def callback(_: Evolution):
         nonlocal counter
         counter += 1
 
