@@ -5,19 +5,19 @@ from evolutionary_programming.operators.multiple_individuals.base import (
     MultipleIndividualOperator,
 )
 from evolutionary_programming.operators.protocols import (
-    IterableIndividualType,
+    SequentialIndividualType,
     GeneType,
 )
 
 
 class OnePointCrossoverOperator(
-    MultipleIndividualOperator[IterableIndividualType[GeneType], GeneType]
+    MultipleIndividualOperator[SequentialIndividualType[GeneType], GeneType]
 ):
     def __call__(
         self,
-        base_individual: IterableIndividualType[GeneType],
-        _parents: Iterable[IterableIndividualType[GeneType]],
-    ) -> IterableIndividualType[GeneType]:
+        base_individual: SequentialIndividualType[GeneType],
+        _parents: Iterable[SequentialIndividualType[GeneType]],
+    ) -> SequentialIndividualType[GeneType]:
         parent1, parent2 = self.pick(base_individual, _parents)
         _parent1_sequence = [i for i in parent1]
         crossover_point = self.crossover_point(_parent1_sequence)

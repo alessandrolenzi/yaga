@@ -1,7 +1,7 @@
-from typing import TypeVar, Protocol, Iterable, Generic
+from typing import TypeVar, Protocol, Sized, Iterable
 
 GeneType = TypeVar("GeneType", covariant=True)
 
 
-class IterableIndividualType(Protocol[GeneType], Iterable[GeneType]):
+class SequentialIndividualType(Protocol[GeneType], Sized, Iterable[GeneType]):
     pass
