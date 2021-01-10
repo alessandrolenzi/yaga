@@ -21,17 +21,17 @@ from evolutionary_programming.ranker import IndividualType, Ranker
 from evolutionary_programming.selectors.selector import Selector
 
 GeneType = TypeVar("GeneType")
-T = TypeVar("T", bound=Comparable)
+ScoreType = TypeVar("ScoreType", bound=Comparable)
 
 
-class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, T]):
+class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, ScoreType]):
     def __init__(
         self,
         *,
         population_size: int,
         generations: Optional[int],
         selector: Selector,
-        ranker: Ranker[IndividualType, T],
+        ranker: Ranker[IndividualType, ScoreType],
         individual_structure: IndividualStructure[IndividualType, GeneType],
         multiple_individual_operators: Sequence[
             Tuple[MultipleIndividualOperatorProtocol[IndividualType], float]
@@ -98,7 +98,9 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, T]):
         self._population += list(self._new_generation(selected))
         self._iterations += 1
 
-    def pick_elites(self, ranked_population: Sequence[Tuple[IndividualType, T]]):
+    def pick_elites(
+        self, ranked_population: Sequence[Tuple[IndividualType, ScoreType]]
+    ):
         return [individual[0] for individual in ranked_population[: self.elite_size]]
 
     def _new_generation(
