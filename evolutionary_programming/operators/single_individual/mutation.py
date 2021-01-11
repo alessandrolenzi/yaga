@@ -1,5 +1,4 @@
-import random
-from typing import List, Tuple, Generic, TypeVar, cast, Iterable, Sequence
+from typing import Tuple, TypeVar, cast, Iterable, Sequence, TYPE_CHECKING, Iterator
 
 from typing_extensions import Final
 
@@ -9,16 +8,29 @@ from evolutionary_programming.operators.protocols import SequentialIndividualTyp
 from evolutionary_programming.operators.single_individual.base import (
     SingleIndividualOperator,
 )
-from evolutionary_programming.operators.base import InvalidOperatorError, GeneType
+from evolutionary_programming.operators.base import InvalidOperatorError
 from evolutionary_programming.utils.random_selection import random_selection
 
+Q = TypeVar("Q")
 T = TypeVar("T")
+if TYPE_CHECKING:
+
+    class IterableIndividualStructure(
+        IndividualStructure[Q, T], Iterable[GeneDefinition[T]]
+    ):
+        ...
+
+
+else:
+    IterableIndividualStructure = IndividualStructure
 
 
 class MutationOperator(SingleIndividualOperator[SequentialIndividualType[T], T]):
     def __init__(
         self,
-        individual_structure: IndividualStructure[SequentialIndividualType[T], T],
+        individual_structure: IterableIndividualStructure[
+            SequentialIndividualType[T], T
+        ],
         genes_to_mutate: int = 1,
     ):
         super().__init__(individual_structure)
@@ -47,7 +59,13 @@ class MutationOperator(SingleIndividualOperator[SequentialIndividualType[T], T])
             for index, gene_def in cast(
                 Sequence[Tuple[int, GeneDefinition[T]]],
                 random_selection(
-                    enumerate(self.individual_structure), self.genes_to_mutate
+                    enumerate(
+                        cast(
+                            IterableIndividualStructure[SequentialIndividualType[T], T],
+                            self.individual_structure,
+                        )
+                    ),
+                    self.genes_to_mutate,
                 ),
             )
         }

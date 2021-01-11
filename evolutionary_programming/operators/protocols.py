@@ -1,8 +1,7 @@
 from typing import TypeVar, Protocol, Sized, Iterable
 
-from evolutionary_programming.individuals import IndividualType
-
 GeneType = TypeVar("GeneType", covariant=True)
+IndividualType = TypeVar("IndividualType")
 
 
 class SequentialIndividualType(Protocol[GeneType], Sized, Iterable[GeneType]):

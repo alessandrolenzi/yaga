@@ -1,28 +1,24 @@
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar, Iterable, Iterator
-
-from evolutionary_programming.genes.gene_definition import GeneDefinition
+from typing import Generic, TypeVar, Iterable, Iterator, Protocol
 
 
 class InvalidIndividual(ValueError):
     pass
 
 
-IndividualType = TypeVar("IndividualType")
-GeneType = TypeVar("GeneType")
+IndividualType = TypeVar("IndividualType", covariant=True)
+GeneType = TypeVar("GeneType", contravariant=True)
 
 
-class IndividualStructure(Generic[IndividualType, GeneType], ABC):
+class IndividualStructure(Protocol[IndividualType, GeneType]):
     """
-    Defines the structure of a class of individuals (problem solutions) through its genes.
+    Defines a class of individuals (problem solutions) through genes.
     """
 
-    @abstractmethod
     def build(self) -> IndividualType:
-        """ Generates a specific individual of this class."""
+        """ Generates an instance of this class."""
         pass
 
-    @abstractmethod
     def build_individual_from_genes_values(
         self, it: Iterable[GeneType]
     ) -> IndividualType:
@@ -34,7 +30,3 @@ class IndividualStructure(Generic[IndividualType, GeneType], ABC):
         :param Iterable[G] it: iterable of values of the genes composing the individual to be built.
         """
         pass
-
-    @abstractmethod
-    def __iter__(self) -> Iterator[GeneDefinition[GeneType]]:
-        ...

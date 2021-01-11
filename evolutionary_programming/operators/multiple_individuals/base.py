@@ -1,11 +1,13 @@
 from abc import abstractmethod
-from typing import Iterable, List, cast
+from typing import Iterable, List, cast, TypeVar
 
 from typing_extensions import Final
 
-from evolutionary_programming.individuals import IndividualType, IndividualStructure
+from evolutionary_programming.individuals import IndividualStructure
 from evolutionary_programming.operators.base import GeneticOperator, GeneType
 from evolutionary_programming.utils.random_selection import random_selection
+
+IndividualType = TypeVar("IndividualType")
 
 
 class MultipleIndividualOperator(GeneticOperator[IndividualType, GeneType]):

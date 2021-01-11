@@ -5,6 +5,7 @@ from typing import (
     Generic,
     Tuple,
     List,
+    Optional,
 )
 
 from evolutionary_programming.evolutionary_algorithm import (
@@ -25,12 +26,12 @@ from evolutionary_programming.selectors.selector import Selector
 
 class EvolutionaryAlgorithmBuilder(Generic[IndividualType, GeneType]):
     population_size: Final[int]
-    generations: Final[int]
+    generations: Final[Optional[int]]
 
     def __init__(
         self,
         population_size: int,
-        generations: int,
+        generations: Optional[int],
         *,
         individual_structure: IndividualStructure[IndividualType, GeneType],
         elite_size: int = 0,
