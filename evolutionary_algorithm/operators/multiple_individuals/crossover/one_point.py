@@ -1,10 +1,10 @@
 import itertools
 import random
 from typing import Iterable, Sequence
-from evolutionary_programming.operators.multiple_individuals.base import (
+from evolutionary_algorithm.operators.multiple_individuals.base import (
     MultipleIndividualOperator,
 )
-from evolutionary_programming.operators.protocols import (
+from evolutionary_algorithm.operators.protocols import (
     SequentialIndividualType,
     GeneType,
 )

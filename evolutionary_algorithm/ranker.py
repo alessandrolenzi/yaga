@@ -1,7 +1,7 @@
 import itertools
 from concurrent.futures._base import Executor
 from typing import Generic, Optional, Sequence, Tuple, Iterable, TypeVar, Callable
-from evolutionary_programming.details import Comparable
+from evolutionary_algorithm.details import Comparable
 
 Q = TypeVar("Q", bound=Comparable)
 IndividualType = TypeVar("IndividualType")

@@ -11,17 +11,17 @@ from typing import (
 )
 from typing_extensions import Final
 
-from evolutionary_programming.builder import EvolutionaryAlgorithmBuilder
-from evolutionary_programming.genes.gene_definition import GeneDefinition
-from evolutionary_programming.genes import IntGene
-from evolutionary_programming.individuals import IndividualStructure
-from evolutionary_programming.operators.multiple_individuals.crossover.one_point import (
+from evolutionary_algorithm.builder import EvolutionaryAlgorithmBuilder
+from evolutionary_algorithm.genes.gene_definition import GeneDefinition
+from evolutionary_algorithm.genes import IntGene
+from evolutionary_algorithm.individuals import IndividualStructure
+from evolutionary_algorithm.operators.multiple_individuals.crossover.one_point import (
     OnePointCrossoverOperator,
 )
-from evolutionary_programming.operators.single_individual.mutation import (
+from evolutionary_algorithm.operators.single_individual.mutation import (
     MutationOperator,
 )
-from evolutionary_programming.selectors.tournament import Tournament
+from evolutionary_algorithm.selectors.tournament import Tournament
 
 T = TypeVar("T")
 TreeType = TypeVar("TreeType", bound="Tree")

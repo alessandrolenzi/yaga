@@ -1,12 +1,12 @@
 from typing import Sequence
 
-from evolutionary_programming.operators.multiple_individuals.crossover.one_point import (
+from evolutionary_algorithm.operators.multiple_individuals.crossover.one_point import (
     OnePointCrossoverOperator,
 )
-from evolutionary_programming.operators.single_individual.mutation import (
+from evolutionary_algorithm.operators.single_individual.mutation import (
     MutationOperator,
 )
-from evolutionary_programming.selectors.stochastic_universal_sampling import (
+from evolutionary_algorithm.selectors.stochastic_universal_sampling import (
     StochasticUniversalSampling,
 )
 

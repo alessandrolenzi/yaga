@@ -8,20 +8,20 @@ from typing import (
     Optional,
 )
 
-from evolutionary_programming.evolutionary_algorithm import (
+from evolutionary_algorithm.evolutionary_algorithm import (
     GeneType,
     EvolutionaryAlgorithm,
 )
-from evolutionary_programming.individuals import IndividualStructure
-from evolutionary_programming.operators.base import GeneticOperator
-from evolutionary_programming.operators.multiple_individuals.base import (
+from evolutionary_algorithm.individuals import IndividualStructure
+from evolutionary_algorithm.operators.base import GeneticOperator
+from evolutionary_algorithm.operators.multiple_individuals.base import (
     MultipleIndividualOperator,
 )
-from evolutionary_programming.operators.single_individual.base import (
+from evolutionary_algorithm.operators.single_individual.base import (
     SingleIndividualOperator,
 )
-from evolutionary_programming.ranker import Ranker, Q, IndividualType
-from evolutionary_programming.selectors.selector import Selector
+from evolutionary_algorithm.ranker import Ranker, Q, IndividualType
+from evolutionary_algorithm.selectors.selector import Selector
 
 
 class EvolutionaryAlgorithmBuilder(Generic[IndividualType, GeneType]):

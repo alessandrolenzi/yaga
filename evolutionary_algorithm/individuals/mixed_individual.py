@@ -1,5 +1,5 @@
 from typing import TypeVar, Any, Union, Tuple, Optional, Callable, Iterable, Sequence
-from evolutionary_programming.genes.gene_definition import GeneDefinition
+from evolutionary_algorithm.genes.gene_definition import GeneDefinition
 from .individual_structure import (
     IndividualStructure,
 )

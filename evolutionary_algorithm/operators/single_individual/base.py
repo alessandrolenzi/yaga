@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import TypeVar
 
-from evolutionary_programming.operators.base import GeneticOperator
+from evolutionary_algorithm.operators.base import GeneticOperator
 
 IndividualType = TypeVar("IndividualType")
 GeneType = TypeVar("GeneType")

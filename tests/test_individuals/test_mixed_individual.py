@@ -1,5 +1,5 @@
-from evolutionary_programming.genes import IntGene, CharGene
-from evolutionary_programming.individuals.mixed_individual import (
+from evolutionary_algorithm.genes import IntGene, CharGene
+from evolutionary_algorithm.individuals.mixed_individual import (
     MixedIndividualStructure,
 )
 

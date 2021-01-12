@@ -1,17 +1,17 @@
 import itertools
 from typing import Tuple, Iterable, Mapping, Sequence
 
-from evolutionary_programming.builder import EvolutionaryAlgorithmBuilder
-from evolutionary_programming.evolution import Evolution
-from evolutionary_programming.genes import GeneDefinition, random
-from evolutionary_programming.individuals import IndividualStructure
-from evolutionary_programming.operators.multiple_individuals.base import (
+from evolutionary_algorithm.builder import EvolutionaryAlgorithmBuilder
+from evolutionary_algorithm.evolution import Evolution
+from evolutionary_algorithm.genes import GeneDefinition, random
+from evolutionary_algorithm.individuals import IndividualStructure
+from evolutionary_algorithm.operators.multiple_individuals.base import (
     MultipleIndividualOperator,
 )
-from evolutionary_programming.operators.single_individual.base import (
+from evolutionary_algorithm.operators.single_individual.base import (
     SingleIndividualOperator,
 )
-from evolutionary_programming.selectors.tournament import Tournament
+from evolutionary_algorithm.selectors.tournament import Tournament
 
 
 QueenPositions = Mapping[int, int]

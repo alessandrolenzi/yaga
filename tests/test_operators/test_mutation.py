@@ -1,9 +1,9 @@
 import pytest
 from doubles import allow
 
-from evolutionary_programming.genes import IntGene
-from evolutionary_programming.individuals import UniformIndividualStructure
-from evolutionary_programming.operators.single_individual.mutation import (
+from evolutionary_algorithm.genes import IntGene
+from evolutionary_algorithm.individuals import UniformIndividualStructure
+from evolutionary_algorithm.operators.single_individual.mutation import (
     MutationOperator,
 )
 

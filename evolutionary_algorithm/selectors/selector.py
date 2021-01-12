@@ -7,7 +7,7 @@ from typing import (
     Final,
 )
 
-from evolutionary_programming.details import Comparable
+from evolutionary_algorithm.details import Comparable
 
 T = TypeVar("T", bound=Comparable, contravariant=True)
 IndividualType = TypeVar("IndividualType")

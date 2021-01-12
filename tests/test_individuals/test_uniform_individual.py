@@ -1,7 +1,7 @@
 import pytest
 
-from evolutionary_programming.genes import CharGene
-from evolutionary_programming.individuals.uniform_individual import (
+from evolutionary_algorithm.genes import CharGene
+from evolutionary_algorithm.individuals.uniform_individual import (
     UniformIndividualStructure,
 )
 

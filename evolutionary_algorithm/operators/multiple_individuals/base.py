@@ -3,9 +3,9 @@ from typing import Iterable, List, cast, TypeVar
 
 from typing_extensions import Final
 
-from evolutionary_programming.individuals import IndividualStructure
-from evolutionary_programming.operators.base import GeneticOperator, GeneType
-from evolutionary_programming.utils.random_selection import random_selection
+from evolutionary_algorithm.individuals import IndividualStructure
+from evolutionary_algorithm.operators.base import GeneticOperator, GeneType
+from evolutionary_algorithm.utils.random_selection import random_selection
 
 IndividualType = TypeVar("IndividualType")
 

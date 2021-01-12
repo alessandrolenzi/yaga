@@ -11,15 +11,15 @@ from typing import (
     Callable,
 )
 
-from evolutionary_programming.details import Comparable
-from evolutionary_programming.evolution import Evolution
-from evolutionary_programming.individuals import IndividualStructure
-from evolutionary_programming.operators.protocols import (
+from evolutionary_algorithm.details import Comparable
+from evolutionary_algorithm.evolution import Evolution
+from evolutionary_algorithm.individuals import IndividualStructure
+from evolutionary_algorithm.operators.protocols import (
     MultipleIndividualOperatorProtocol,
     SingleIndividualOperatorProtocol,
 )
-from evolutionary_programming.ranker import IndividualType, Ranker
-from evolutionary_programming.selectors.selector import Selector
+from evolutionary_algorithm.ranker import IndividualType, Ranker
+from evolutionary_algorithm.selectors.selector import Selector
 
 GeneType = TypeVar("GeneType")
 ScoreType = TypeVar("ScoreType", bound=Comparable)

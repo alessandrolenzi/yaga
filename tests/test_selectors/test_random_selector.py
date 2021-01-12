@@ -1,6 +1,6 @@
 from doubles import expect
 
-from evolutionary_programming.selectors.random import Random
+from evolutionary_algorithm.selectors.random import Random
 
 
 def test_random_selector():

@@ -1,15 +1,15 @@
-from evolutionary_programming.builder import EvolutionaryAlgorithmBuilder
-from evolutionary_programming.genes import IntGene, FloatGene, CharGene
-from evolutionary_programming.individuals.mixed_individual import (
+from evolutionary_algorithm.builder import EvolutionaryAlgorithmBuilder
+from evolutionary_algorithm.genes import IntGene, FloatGene, CharGene
+from evolutionary_algorithm.individuals.mixed_individual import (
     MixedIndividualStructure,
 )
-from evolutionary_programming.operators.multiple_individuals.crossover.one_point import (
+from evolutionary_algorithm.operators.multiple_individuals.crossover.one_point import (
     OnePointCrossoverOperator,
 )
-from evolutionary_programming.operators.single_individual.mutation import (
+from evolutionary_algorithm.operators.single_individual.mutation import (
     MutationOperator,
 )
-from evolutionary_programming.selectors.tournament import Tournament
+from evolutionary_algorithm.selectors.tournament import Tournament
 
 target = (0.111, 0.34, 128, "c", "a")
 

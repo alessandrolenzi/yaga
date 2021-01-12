@@ -1,6 +1,6 @@
 from doubles import expect
 
-from evolutionary_programming.evolutionary_algorithm import EvolutionaryAlgorithm
+from evolutionary_algorithm.evolutionary_algorithm import EvolutionaryAlgorithm
 
 
 def test_can_set_initial_population(

@@ -2,18 +2,18 @@ from copy import copy
 
 from doubles import expect
 
-from evolutionary_programming.evolution import Evolution
-from evolutionary_programming.evolutionary_algorithm import EvolutionaryAlgorithm
-from evolutionary_programming.genes import IntGene
-from evolutionary_programming.individuals import UniformIndividualStructure
-from evolutionary_programming.operators.multiple_individuals.crossover.one_point import (
+from evolutionary_algorithm.evolution import Evolution
+from evolutionary_algorithm.evolutionary_algorithm import EvolutionaryAlgorithm
+from evolutionary_algorithm.genes import IntGene
+from evolutionary_algorithm.individuals import UniformIndividualStructure
+from evolutionary_algorithm.operators.multiple_individuals.crossover.one_point import (
     OnePointCrossoverOperator,
 )
-from evolutionary_programming.operators.single_individual.mutation import (
+from evolutionary_algorithm.operators.single_individual.mutation import (
     MutationOperator,
 )
-from evolutionary_programming.ranker import Ranker
-from evolutionary_programming.selectors.random import Random
+from evolutionary_algorithm.ranker import Ranker
+from evolutionary_algorithm.selectors.random import Random
 
 
 def test_iteration_calls_ranker():

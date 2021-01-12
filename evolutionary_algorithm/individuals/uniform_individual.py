@@ -1,5 +1,5 @@
 from typing import TypeVar, Tuple, Union, Sequence
-from evolutionary_programming.genes.gene_definition import GeneDefinition
+from evolutionary_algorithm.genes.gene_definition import GeneDefinition
 from .individual_structure import IndividualStructure
 from .traits.gene_sequence import GeneSequenceTrait
 from .traits.linear_individual import LinearIndividualTrait

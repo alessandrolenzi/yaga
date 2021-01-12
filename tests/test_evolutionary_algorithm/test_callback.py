@@ -1,4 +1,4 @@
-from evolutionary_programming.evolution import Evolution
+from evolutionary_algorithm.evolution import Evolution
 
 
 def test_callback_can_stop_evolution(default_evolutionary_algorithm):

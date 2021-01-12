@@ -1,6 +1,6 @@
 from doubles import expect
 
-from evolutionary_programming.selectors.tournament import Tournament
+from evolutionary_algorithm.selectors.tournament import Tournament
 
 
 def test_tournament_selects_best():

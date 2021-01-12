@@ -1,6 +1,6 @@
 from doubles import expect
 
-from evolutionary_programming.selectors.stochastic_universal_sampling import (
+from evolutionary_algorithm.selectors.stochastic_universal_sampling import (
     StochasticUniversalSampling,
 )
 

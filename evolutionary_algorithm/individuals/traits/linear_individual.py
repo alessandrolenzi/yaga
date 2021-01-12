@@ -1,6 +1,6 @@
 from typing import TypeVar, Generic, Iterable, Tuple, Sequence
 
-from evolutionary_programming.genes import GeneDefinition
+from evolutionary_algorithm.genes import GeneDefinition
 
 T = TypeVar("T")
 

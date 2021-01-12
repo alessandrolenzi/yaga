@@ -1,4 +1,4 @@
-from evolutionary_programming.selectors.ranking import Ranking
+from evolutionary_algorithm.selectors.ranking import Ranking
 
 
 def test_ranking_selector_returns_first():

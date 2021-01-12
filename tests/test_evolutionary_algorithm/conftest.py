@@ -2,11 +2,11 @@ from typing import Tuple, Callable
 
 import pytest
 
-from evolutionary_programming.evolutionary_algorithm import EvolutionaryAlgorithm
-from evolutionary_programming.genes import IntGene
-from evolutionary_programming.individuals import UniformIndividualStructure
-from evolutionary_programming.ranker import Ranker
-from evolutionary_programming.selectors.tournament import Tournament
+from evolutionary_algorithm.evolutionary_algorithm import EvolutionaryAlgorithm
+from evolutionary_algorithm.genes import IntGene
+from evolutionary_algorithm.individuals import UniformIndividualStructure
+from evolutionary_algorithm.ranker import Ranker
+from evolutionary_algorithm.selectors.tournament import Tournament
 
 
 @pytest.fixture

@@ -1,6 +1,6 @@
-from evolutionary_programming.builder import EvolutionaryAlgorithmBuilder
-from evolutionary_programming.genes import IntGene
-from evolutionary_programming.individuals.uniform_individual import (
+from evolutionary_algorithm.builder import EvolutionaryAlgorithmBuilder
+from evolutionary_algorithm.genes import IntGene
+from evolutionary_algorithm.individuals.uniform_individual import (
     UniformIndividualStructure,
 )
 

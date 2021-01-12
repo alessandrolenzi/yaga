@@ -1,8 +1,8 @@
 import random
 from typing import Iterable, Sequence, Tuple, Set, TypeVar, Generic
 
-from evolutionary_programming.details import Comparable
-from evolutionary_programming.selectors.selector import IndividualType, Selector, T
+from evolutionary_algorithm.details import Comparable
+from evolutionary_algorithm.selectors.selector import IndividualType, Selector, T
 
 ScoreType = TypeVar("ScoreType", bound=Comparable)
 

@@ -1,8 +1,8 @@
 import random
 from typing import Sequence, Iterable, Tuple, Generic, TypeVar, List
 
-from evolutionary_programming.details import Comparable
-from evolutionary_programming.selectors.selector import IndividualType
+from evolutionary_algorithm.details import Comparable
+from evolutionary_algorithm.selectors.selector import IndividualType
 
 
 class FloatComparable(Comparable):

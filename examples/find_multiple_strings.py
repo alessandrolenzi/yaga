@@ -4,26 +4,26 @@ from dataclasses import dataclass
 import string
 from typing import Sequence, Optional, Iterable, Any, Tuple, List
 
-from evolutionary_programming.builder import EvolutionaryAlgorithmBuilder
-from evolutionary_programming.genes import CharGene, GeneDefinition
-from evolutionary_programming.individuals import (
+from evolutionary_algorithm.builder import EvolutionaryAlgorithmBuilder
+from evolutionary_algorithm.genes import CharGene, GeneDefinition
+from evolutionary_algorithm.individuals import (
     UniformIndividualStructure,
     IndividualType,
 )
-from evolutionary_programming.individuals.individual_structure import (
+from evolutionary_algorithm.individuals.individual_structure import (
     IndividualStructure,
     GeneType,
 )
-from evolutionary_programming.operators.multiple_individuals.base import (
+from evolutionary_algorithm.operators.multiple_individuals.base import (
     MultipleIndividualOperator,
 )
-from evolutionary_programming.operators.multiple_individuals.crossover.one_point import (
+from evolutionary_algorithm.operators.multiple_individuals.crossover.one_point import (
     OnePointCrossoverOperator,
 )
-from evolutionary_programming.operators.single_individual.mutation import (
+from evolutionary_algorithm.operators.single_individual.mutation import (
     MutationOperator,
 )
-from evolutionary_programming.selectors.tournament import Tournament
+from evolutionary_algorithm.selectors.tournament import Tournament
 
 to_find = ["welcome", "to", "yaga"]
 

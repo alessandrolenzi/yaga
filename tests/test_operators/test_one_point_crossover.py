@@ -1,9 +1,9 @@
 import pytest
 from doubles import expect
 
-from evolutionary_programming.genes import IntGene
-from evolutionary_programming.individuals import UniformIndividualStructure
-from evolutionary_programming.operators.multiple_individuals.crossover.one_point import (
+from evolutionary_algorithm.genes import IntGene
+from evolutionary_algorithm.individuals import UniformIndividualStructure
+from evolutionary_algorithm.operators.multiple_individuals.crossover.one_point import (
     OnePointCrossoverOperator,
 )
 

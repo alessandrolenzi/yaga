@@ -5,7 +5,7 @@ from typing import Tuple
 import pytest
 
 from bounded_async_executor import BoundedAsyncioExecutor
-from evolutionary_programming.ranker import Ranker
+from evolutionary_algorithm.ranker import Ranker
 
 
 def score_function(individual: Tuple[int, ...]) -> float:

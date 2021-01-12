@@ -1,12 +1,12 @@
 from typing import Generic, TypeVar, Iterable, Tuple, TYPE_CHECKING
 from typing_extensions import Final
-from evolutionary_programming.details import Comparable
-from evolutionary_programming.genes.gene_definition import GeneType
+from evolutionary_algorithm.details import Comparable
+from evolutionary_algorithm.genes.gene_definition import GeneType
 
-from evolutionary_programming.individuals import IndividualType
+from evolutionary_algorithm.individuals import IndividualType
 
 if TYPE_CHECKING:
-    from evolutionary_programming.evolutionary_algorithm import EvolutionaryAlgorithm
+    from evolutionary_algorithm.evolutionary_algorithm import EvolutionaryAlgorithm
 
 ScoreType = TypeVar("ScoreType", bound=Comparable)
 

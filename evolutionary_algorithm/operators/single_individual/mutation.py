@@ -2,14 +2,14 @@ from typing import Tuple, TypeVar, cast, Iterable, Sequence, TYPE_CHECKING, Iter
 
 from typing_extensions import Final
 
-from evolutionary_programming.genes import GeneDefinition
-from evolutionary_programming.individuals import IndividualStructure
-from evolutionary_programming.operators.protocols import SequentialIndividualType
-from evolutionary_programming.operators.single_individual.base import (
+from evolutionary_algorithm.genes import GeneDefinition
+from evolutionary_algorithm.individuals import IndividualStructure
+from evolutionary_algorithm.operators.protocols import SequentialIndividualType
+from evolutionary_algorithm.operators.single_individual.base import (
     SingleIndividualOperator,
 )
-from evolutionary_programming.operators.base import InvalidOperatorError
-from evolutionary_programming.utils.random_selection import random_selection
+from evolutionary_algorithm.operators.base import InvalidOperatorError
+from evolutionary_algorithm.utils.random_selection import random_selection
 
 Q = TypeVar("Q")
 T = TypeVar("T")

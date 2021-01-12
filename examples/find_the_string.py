@@ -1,18 +1,18 @@
 import string
 from typing import Sequence
 
-from evolutionary_programming.builder import EvolutionaryAlgorithmBuilder
-from evolutionary_programming.genes import CharGene
-from evolutionary_programming.individuals.uniform_individual import (
+from evolutionary_algorithm.builder import EvolutionaryAlgorithmBuilder
+from evolutionary_algorithm.genes import CharGene
+from evolutionary_algorithm.individuals.uniform_individual import (
     UniformIndividualStructure,
 )
-from evolutionary_programming.operators.multiple_individuals.crossover.one_point import (
+from evolutionary_algorithm.operators.multiple_individuals.crossover.one_point import (
     OnePointCrossoverOperator,
 )
-from evolutionary_programming.operators.single_individual.mutation import (
+from evolutionary_algorithm.operators.single_individual.mutation import (
     MutationOperator,
 )
-from evolutionary_programming.selectors.tournament import Tournament
+from evolutionary_algorithm.selectors.tournament import Tournament
 
 to_find = "welcome to yaga"
 
