@@ -4,7 +4,6 @@ from typing import (
     Iterable,
     TypeVar,
     Protocol,
-    Final,
 )
 
 from evolutionary_algorithm.details import Comparable

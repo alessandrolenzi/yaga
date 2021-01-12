@@ -5,8 +5,9 @@ from typing import (
     Generic,
     Tuple,
     List,
-    Optional,
+    Optional, Union, cast,
 )
+from inspect import signature
 
 from evolutionary_algorithm.evolutionary_algorithm import (
     GeneType,
@@ -17,6 +18,8 @@ from evolutionary_algorithm.operators.base import GeneticOperator
 from evolutionary_algorithm.operators.multiple_individuals.base import (
     MultipleIndividualOperator,
 )
+from evolutionary_algorithm.operators.protocols import \
+    MultipleIndividualOperatorProtocol, SingleIndividualOperatorProtocol
 from evolutionary_algorithm.operators.single_individual.base import (
     SingleIndividualOperator,
 )
@@ -38,7 +41,12 @@ class EvolutionaryAlgorithmBuilder(Generic[IndividualType, GeneType]):
     ):
         self.population_size = population_size
         self.generations = generations
-        self._operators: List[Tuple[GeneticOperator, float]] = []
+        self._multiple_individual_operators: List[Tuple[
+            MultipleIndividualOperatorProtocol[IndividualType], float
+        ]] = []
+        self._single_individual_operators: List[Tuple[
+            SingleIndividualOperatorProtocol[IndividualType], float
+        ]] = []
         self._indstr: Final = individual_structure
         self.elite_size = elite_size
 
@@ -52,35 +60,38 @@ class EvolutionaryAlgorithmBuilder(Generic[IndividualType, GeneType]):
 
     def add_operator(
         self,
-        operator_builder: GeneticOperator[IndividualStructure, GeneType],
+        operator_builder: Callable[[IndividualStructure], Union[MultipleIndividualOperatorProtocol[IndividualType], SingleIndividualOperatorProtocol[IndividualType]]],
         execution_probability: float,
     ):
-        self._operators.append((operator_builder, execution_probability))
+        self.add_operator_instance(operator_builder(self._indstr), execution_probability)
+        return self
+
+    def add_operator_instance(self, operator: Union[MultipleIndividualOperatorProtocol[IndividualType], SingleIndividualOperatorProtocol[IndividualType]], execution_probability: float):
+        if self._is_multiple_individual_op(operator):
+            self._multiple_individual_operators.append((cast(MultipleIndividualOperatorProtocol[IndividualType], operator), execution_probability))
+        elif self._is_single_individual_op(operator):
+            self._single_individual_operators.append((cast(SingleIndividualOperatorProtocol[IndividualType],operator), execution_probability))
+        else:
+            raise TypeError('The specified operator is not supported; you must respect MultipleIndividualOperatorProtocol or SingleIndividualOperator protocol.')
         return self
 
     def initialize(self, score_function: Callable[[IndividualType], Q]):
-        (
-            multiple_individual_operators,
-            single_individual_operators,
-        ) = self._prepare_operators()
         return EvolutionaryAlgorithm(
             population_size=self.population_size,
             generations=self.generations,
             individual_structure=self._indstr,
             ranker=Ranker(score_function),
             selector=self._selector,
-            multiple_individual_operators=multiple_individual_operators,
-            single_individual_operators=single_individual_operators,
+            multiple_individual_operators=self._multiple_individual_operators,
+            single_individual_operators=self._single_individual_operators,
             elite_size=self.elite_size,
         )
 
-    def _prepare_operators(self):
-        multiple_operators: List[Tuple[MultipleIndividualOperator, float]] = []
-        single_operators: List[Tuple[SingleIndividualOperator, float]] = []
-        for operator, prob in self._operators:
-            concrete = operator(self._indstr)
-            if isinstance(concrete, MultipleIndividualOperator):
-                multiple_operators.append((concrete, prob))
-            else:
-                single_operators.append((concrete, prob))
-        return multiple_operators, single_operators
+    @staticmethod
+    def _is_single_individual_op(operator: Union[MultipleIndividualOperatorProtocol[IndividualType], SingleIndividualOperatorProtocol[IndividualType]]):
+        return isinstance(operator, SingleIndividualOperatorProtocol) and len(signature(operator).parameters) == 1
+
+    @staticmethod
+    def _is_multiple_individual_op(operator: Union[MultipleIndividualOperatorProtocol[IndividualType], SingleIndividualOperatorProtocol[IndividualType]]):
+        return isinstance(operator, MultipleIndividualOperatorProtocol) and len(signature(operator).parameters) == 2
+

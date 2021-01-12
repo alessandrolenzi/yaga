@@ -1,6 +1,8 @@
 import itertools
 import random
 from typing import Iterable, Sequence
+
+from evolutionary_algorithm.individuals import IndividualStructure
 from evolutionary_algorithm.operators.multiple_individuals.base import (
     MultipleIndividualOperator,
 )
@@ -13,6 +15,9 @@ from evolutionary_algorithm.operators.protocols import (
 class OnePointCrossoverOperator(
     MultipleIndividualOperator[SequentialIndividualType[GeneType], GeneType]
 ):
+    def __init__(self, individual_structure: IndividualStructure[SequentialIndividualType[GeneType], GeneType]):
+        super().__init__(individual_structure, arity=2)
+
     def __call__(
         self,
         base_individual: SequentialIndividualType[GeneType],
@@ -30,4 +35,4 @@ class OnePointCrossoverOperator(
         )
 
     def crossover_point(self, individual: Sequence[GeneType]) -> int:
-        return random.randint(0, len(individual) - 1)
+        return random.randrange(0, len(individual))

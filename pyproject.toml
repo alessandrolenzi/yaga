@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "yaga"
 version = "0.1.0"
-description = "Yet Another Genetic Algorithm library: allows to define genetic and evolutionary algorithms, with production ready capabilities."
+description = "YaGA Genetic Algorithms: allows to define genetic and evolutionary algorithms, with production ready capabilities."
 authors = ["Alessandro Lenzi <aless.lenzi@gmail.com>"]
 license = "MIT"
 
