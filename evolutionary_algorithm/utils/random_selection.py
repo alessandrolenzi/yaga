@@ -12,7 +12,7 @@ def reservoir_sampling(to_select: int, iterator: Iterable[T]) -> List[T]:
         if position < to_select:
             selected.append(element)
         else:
-            candidate_position = random.randint(0, position - 1)
+            candidate_position = random.randint(0, position)
             if candidate_position < to_select:
                 selected[candidate_position] = element
     return selected
@@ -25,7 +25,6 @@ def random_selection(iterator: Iterable[T], number_of_elements: int) -> List[T]:
 
 @random_selection.register(collections.abc.Sequence)
 def random_selection_on_bounded(sequence, number_of_elements):
-    max_elements = min(len(sequence), number_of_elements)
     return [
-        sequence[random.randint(0, max_elements - 1)] for _ in range(number_of_elements)
+        sequence[random.randrange(0, len(sequence))] for _ in range(number_of_elements)
     ]

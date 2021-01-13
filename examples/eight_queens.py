@@ -140,11 +140,10 @@ def solve_eight_queens():
             print(e.fittest)
             found_it = e.current_iteration
 
-    eva.iterations_callback.append(callback)
+    eva._iterations_callback.append(callback)
     eva.run()
     return found_it
 
 
 if __name__ == "__main__":
-    l = [solve_eight_queens() for i in range(100)]
-    print(f"Solved on average after {sum(l)/len(l)} iters.")
+    solve_eight_queens()

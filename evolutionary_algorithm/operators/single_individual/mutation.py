@@ -3,8 +3,11 @@ from typing import Tuple, TypeVar, cast, Iterable, Sequence, TYPE_CHECKING, Iter
 from typing_extensions import Final
 
 from evolutionary_algorithm.genes import GeneDefinition
-from evolutionary_algorithm.individuals import IndividualStructure
-from evolutionary_algorithm.operators.protocols import SequentialIndividualType
+from evolutionary_algorithm.individuals.protocols import IterableIndividualStructure
+from evolutionary_algorithm.operators.protocols import (
+    SequentialIndividualType,
+    SingleIndividualOperatorProtocol,
+)
 from evolutionary_algorithm.operators.single_individual.base import (
     SingleIndividualOperator,
 )
@@ -13,24 +16,17 @@ from evolutionary_algorithm.utils.random_selection import random_selection
 
 Q = TypeVar("Q")
 T = TypeVar("T")
-if TYPE_CHECKING:
 
-    class IterableIndividualStructure(
-        IndividualStructure[Q, T], Iterable[GeneDefinition[T]]
-    ):
-        ...
+IndividualType = TypeVar("IndividualType", bound=SequentialIndividualType)
 
 
-else:
-    IterableIndividualStructure = IndividualStructure
-
-
-class MutationOperator(SingleIndividualOperator[SequentialIndividualType[T], T]):
+class MutationOperator(
+    SingleIndividualOperator[IndividualType, T],
+    SingleIndividualOperatorProtocol[IndividualType],
+):
     def __init__(
         self,
-        individual_structure: IterableIndividualStructure[
-            SequentialIndividualType[T], T
-        ],
+        individual_structure: IterableIndividualStructure[IndividualType, T],
         genes_to_mutate: int = 1,
     ):
         super().__init__(individual_structure)
@@ -40,9 +36,7 @@ class MutationOperator(SingleIndividualOperator[SequentialIndividualType[T], T])
             )
         self.genes_to_mutate: Final = genes_to_mutate
 
-    def __call__(
-        self, _individual: SequentialIndividualType[T]
-    ) -> SequentialIndividualType[T]:
+    def __call__(self, _individual: SequentialIndividualType[T]) -> IndividualType:
 
         return self.individual_structure.build_individual_from_genes_values(
             self._new_individual_values(_individual)
@@ -69,6 +63,7 @@ class MutationOperator(SingleIndividualOperator[SequentialIndividualType[T], T])
                 ),
             )
         }
+
         for gene_index, gene_value in enumerate(_individual):
             if gene_index in genes_to_mutate:
                 yield genes_to_mutate[gene_index].generate()

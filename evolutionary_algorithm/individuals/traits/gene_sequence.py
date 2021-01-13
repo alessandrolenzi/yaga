@@ -20,8 +20,7 @@ class GeneSequenceTrait(Generic[T]):
         return len(self.genes)
 
     def __iter__(self) -> Iterator[T]:
-        for gene in self.genes:
-            yield gene
+        return iter(self.genes)
 
     @classmethod
     def _to_tuple(cls, genes: Union[Sequence[T], T]) -> Tuple[T, ...]:

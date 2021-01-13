@@ -62,7 +62,9 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, ScoreType]):
         self._iterations = 0
         self._stop = False
         self._population: List[IndividualType] = []
-        self.iterations_callback = iteration_callbacks or []
+        self._iterations_callback: List[Callable[["Evolution"], None]] = (
+            list(iteration_callbacks) if iteration_callbacks else []
+        )
 
     def set_initial_population(
         self, initial_population_iterator: Iterable[IndividualType]
@@ -77,18 +79,18 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, ScoreType]):
         while len(self._population) < self.population_size:
             self._population.append(self.individual_structures.build())
 
-    def run(self):
+    def run(self) -> "Evolution":
         self.ensure_population_initialized()
         self._stop = False
         self._iterations = 0
         while not self._should_stop():
             self.perform_iteration()
             self.execute_callbacks()
-        return self.ranker.ranked_population[0]
+        return Evolution(self)
 
     def execute_callbacks(self):
         status = Evolution(self)
-        for callback in self.iterations_callback:
+        for callback in self._iterations_callback:
             callback(status)
 
     def perform_iteration(self):
@@ -124,6 +126,10 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, ScoreType]):
         return self._stop or (
             self.generations is not None and self._iterations >= self.generations
         )
+
+    def add_callback(self, callback: Callable[["Evolution"], None]):
+        self._iterations_callback.append(callback)
+        return self
 
     @property
     def fittest_individual(self):

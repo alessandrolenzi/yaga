@@ -18,9 +18,14 @@ from evolutionary_algorithm.individuals import IndividualStructure
 from evolutionary_algorithm.operators.multiple_individuals.crossover.one_point import (
     OnePointCrossoverOperator,
 )
+from evolutionary_algorithm.operators.multiple_individuals.crossover.uniform import (
+    UniformCrossoverOperator,
+)
 from evolutionary_algorithm.operators.single_individual.mutation import (
     MutationOperator,
 )
+from evolutionary_algorithm.ranker import Ranker
+from evolutionary_algorithm.selectors import Ranking
 from evolutionary_algorithm.selectors.tournament import Tournament
 
 T = TypeVar("T")
@@ -99,7 +104,7 @@ def evaluate_binary_search_tree(t: Tree[int]):
         return binary_trees
 
     _tot_values_held = sum(i for i in t)
-    return (_evaluate_recursive(t) / 30) * _tot_values_held
+    return ((_evaluate_recursive(t) - 15) / 30) * _tot_values_held
 
 
 class TreeIndividualStructure(IndividualStructure[Tree[int], int]):
@@ -135,18 +140,20 @@ def find_binary_tree():
     eva = (
         EvolutionaryAlgorithmBuilder(
             population_size=200,
-            generations=2000,
-            elite_size=10,
+            generations=500,
+            elite_size=20,
             individual_structure=tree_structure(30),
         )
-        .selector(Tournament(tournament_size=3, selection_size=50))
+        .selector(Ranking(selection_size=10))
         .add_operator(MutationOperator, 0.1)
-        .add_operator(OnePointCrossoverOperator, 0.08)
+        .add_operator(UniformCrossoverOperator, 0.9)
         .initialize(evaluate_binary_search_tree)
     )
-    result, score = eva.run()
-    print(f"result is binary search tree? {_is_bst(result)}, {score}")
-    all_values = tuple(i for i in result)
+    evolution = eva.run()
+    print(
+        f"result is binary search tree? {_is_bst(evolution.fittest)}, {evolution.fittest_score}"
+    )
+    all_values = tuple(i for i in evolution.fittest)
     print(f"average value is {sum(all_values)/len(all_values)}")
 
 

@@ -1,4 +1,4 @@
-from typing import TypeVar, Generic, Iterable, Tuple, Sequence
+from typing import TypeVar, Generic, Iterable, Tuple, Sequence, Iterator
 
 from evolutionary_algorithm.genes import GeneDefinition
 
@@ -16,3 +16,6 @@ class LinearIndividualTrait(Generic[T]):
 
     def build_individual_from_genes_values(self, it: Iterable[T]) -> Tuple[T, ...]:
         return tuple(i for i in it)
+
+    def __iter__(self) -> Iterator[GeneDefinition[T]]:
+        return iter(self.genes_iterable)

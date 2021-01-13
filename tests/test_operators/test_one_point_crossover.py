@@ -9,8 +9,10 @@ from evolutionary_algorithm.individuals import UniformIndividualStructure
 from evolutionary_algorithm.operators.multiple_individuals.crossover.one_point import (
     OnePointCrossoverOperator,
 )
-from evolutionary_algorithm.operators.protocols import \
-    MultipleIndividualOperatorProtocol, SingleIndividualOperatorProtocol
+from evolutionary_algorithm.operators.protocols import (
+    MultipleIndividualOperatorProtocol,
+    SingleIndividualOperatorProtocol,
+)
 
 
 @pytest.mark.parametrize("crossover_point", [0, 2, 5, 9, 50])
@@ -48,4 +50,3 @@ def test_one_point_crossover(crossover_point):
 #     import pdb; pdb.set_trace()
 #     assert isinstance(fakeop, MultipleIndividualOperatorProtocol)
 #     assert not isinstance(fakeop, SingleIndividualOperatorProtocol)
-

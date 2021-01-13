@@ -1,6 +1,7 @@
 from typing import TypeVar, Tuple, Union, Sequence
 from evolutionary_algorithm.genes.gene_definition import GeneDefinition
 from .individual_structure import IndividualStructure
+from .protocols import IterableIndividualStructure
 from .traits.gene_sequence import GeneSequenceTrait
 from .traits.linear_individual import LinearIndividualTrait
 
@@ -11,7 +12,7 @@ SType = TypeVar("SType")
 class UniformIndividualStructure(
     GeneSequenceTrait[GeneDefinition[GenesType]],
     LinearIndividualTrait[GenesType],
-    IndividualStructure[Tuple[GenesType, ...], GenesType],
+    IterableIndividualStructure[Tuple[GenesType, ...], GenesType],
 ):
     """
     Represents an individual with genes all of the same type.
