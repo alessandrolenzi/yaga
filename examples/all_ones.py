@@ -6,7 +6,7 @@ from evolutionary_algorithm.operators.multiple_individuals.crossover.two_points 
 from evolutionary_algorithm.selectors.stochastic_universal_sampling import (
     StochasticUniversalSampling,
 )
-from genetic_algorithm.binary import Binary as BinaryGeneticAlgorithm
+from genetic_algorithm.binary import BinaryGeneticAlgorithm as BinaryGeneticAlgorithm
 
 
 def evaluate_ones(ind: Sequence[int]):

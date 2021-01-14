@@ -1,4 +1,5 @@
 import string
+from functools import partial
 from typing import Sequence
 
 from evolutionary_algorithm.builder import EvolutionaryAlgorithmBuilder
@@ -44,7 +45,7 @@ def find_the_string():
             elite_size=2,
         )
         .selector(Tournament(tournament_size=5, selection_size=50))
-        .add_operator(UniformCrossoverOperator, 0.8)
+        .add_operator(partial(UniformCrossoverOperator, arity=5), 0.8)
         .add_operator(MutationOperator, 0.4)
         .add_callback(callback)
         .initialize(evaluate)

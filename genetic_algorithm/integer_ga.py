@@ -1,26 +1,19 @@
-from typing import TypeVar, Callable, Tuple
+from typing import Tuple, Callable
 
 from evolutionary_algorithm.builder import EvolutionaryAlgorithmBuilder
-from evolutionary_algorithm.details import Comparable
 from evolutionary_algorithm.genes import IntGene
-from evolutionary_algorithm.individuals import IndividualStructure
-from evolutionary_algorithm.individuals.uniform_individual import (
+from evolutionary_algorithm.individuals import (
+    IndividualStructure,
     UniformIndividualStructure,
-)
-from evolutionary_algorithm.operators.multiple_individuals.crossover.one_point import (
-    OnePointCrossoverOperator,
 )
 from evolutionary_algorithm.operators.protocols import (
     MultipleIndividualOperatorProtocol,
 )
 from evolutionary_algorithm.operators.single_individual.mutation import MutationOperator
-
 from evolutionary_algorithm.selectors import Selector
 
-ScoreType = TypeVar("ScoreType", bound=Comparable)
 
-
-class Binary(EvolutionaryAlgorithmBuilder[Tuple[int, ...], int]):
+class IntegerGeneticAlgorithm(EvolutionaryAlgorithmBuilder[Tuple[int, ...], int]):
     def __init__(
         self,
         population_size: int,
@@ -33,10 +26,15 @@ class Binary(EvolutionaryAlgorithmBuilder[Tuple[int, ...], int]):
         selector: Selector,
         crossover_probability: float,
         mutation_probability: float,
+        lower_bound: int,
+        upper_bound: int,
         elite_size: int = 0,
     ):
         individual_structure = UniformIndividualStructure(
-            tuple(IntGene(lower_bound=0, upper_bound=1) for _ in range(solution_size))
+            tuple(
+                IntGene(lower_bound=lower_bound, upper_bound=upper_bound)
+                for _ in range(solution_size)
+            )
         )
 
         super().__init__(
