@@ -1,0 +1,3 @@
+from .individual_structure import IndividualStructure, IndividualType, InvalidIndividual
+from .mixed_individual import MixedIndividualStructure
+from .uniform_individual import UniformIndividualStructure

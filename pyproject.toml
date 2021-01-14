@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "yaga-ga"
+version = "0.1.0"
+description = "YaGA Genetic Algorithms: allows to define genetic and evolutionary algorithms"
+authors = ["Alessandro Lenzi <aless.lenzi@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/alessandrolenzi/yaga"
+repository = "https://github.com/alessandrolenzi/yaga"
+include = [
+    "LICENSE", "py.typed"
+]
+keywords = ['evolutionary programming', 'genetic algorithms', 'genetic', 'crossover', 'mutation', 'ai', 'evolution', 'evolutionary algorithms']
+
+[tool.poetry.dependencies]
+python = "^3.7"
+typing-extensions = "^3.7.4"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.1.2"
+black = "^20.8b1"
+mypy = "^0.790"
+doubles = "^1.5.3"
+pytest-mypy = "^0.8.0"
+pytest-asyncio = "^0.14.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
