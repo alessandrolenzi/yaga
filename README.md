@@ -1,4 +1,4 @@
-# YAGA: Advanced Genetic Algorithms
+# YaGA Genetic Algorithms
 Target of this library is providing a way to model more complex problems in a natural way, without having to rely to string-like representation as most of the other libraries around.
 Allows for several customisation points and definition of custom operators.
 
