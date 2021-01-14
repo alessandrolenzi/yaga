@@ -3,8 +3,8 @@ from typing import (
     Tuple,
     Iterable,
     TypeVar,
-    Protocol,
 )
+from typing_extensions import Protocol
 
 from evolutionary_algorithm.details import Comparable
 

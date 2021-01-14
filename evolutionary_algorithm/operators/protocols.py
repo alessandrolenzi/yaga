@@ -1,4 +1,5 @@
-from typing import TypeVar, Protocol, Sized, Iterable, runtime_checkable
+from typing import TypeVar, Sized, Iterable
+from typing_extensions import Protocol, runtime_checkable
 
 GeneType = TypeVar("GeneType", covariant=True)
 IndividualType = TypeVar("IndividualType")

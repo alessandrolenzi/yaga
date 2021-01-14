@@ -1,6 +1,5 @@
 from concurrent.futures._base import Executor
 from typing import (
-    Final,
     Callable,
     Generic,
     Tuple,
@@ -9,6 +8,7 @@ from typing import (
     Union,
     cast,
 )
+from typing_extensions import Final
 from inspect import signature
 
 from evolutionary_algorithm.evolution import Evolution

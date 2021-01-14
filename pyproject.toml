@@ -1,9 +1,15 @@
 [tool.poetry]
-name = "yaga"
+name = "yaga-ga"
 version = "0.1.0"
-description = "YaGA Genetic Algorithms: allows to define genetic and evolutionary algorithms, with production ready capabilities."
+description = "YaGA Genetic Algorithms: allows to define genetic and evolutionary algorithms"
 authors = ["Alessandro Lenzi <aless.lenzi@gmail.com>"]
 license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/alessandrolenzi/yaga"
+repository = "https://github.com/alessandrolenzi/yaga"
+include = [
+    "LICENSE"
+]
 
 [tool.poetry.dependencies]
 python = "^3.7"

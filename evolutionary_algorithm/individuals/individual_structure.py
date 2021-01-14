@@ -1,5 +1,5 @@
-from abc import ABC, abstractmethod
-from typing import Generic, TypeVar, Iterable, Iterator, Protocol
+from typing import TypeVar, Iterable
+from typing_extensions import Protocol
 
 
 class InvalidIndividual(ValueError):

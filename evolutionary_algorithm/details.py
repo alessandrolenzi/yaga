@@ -1,4 +1,5 @@
-from typing import TypeVar, Protocol, Any
+from typing import TypeVar, Any
+from typing_extensions import Protocol
 
 T = TypeVar("T")
 
