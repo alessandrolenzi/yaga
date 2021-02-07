@@ -42,6 +42,7 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, ScoreType]):
         ],
         iteration_callbacks: Optional[Sequence[Callable[["Evolution"], None]]] = None,
         elite_size: int = 0,
+        start_iteration: int = 0,
     ):
         if population_size <= 0:
             raise ValueError(
@@ -59,7 +60,7 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, ScoreType]):
         self.multiple_individual_operator = multiple_individual_operators
         self.single_individual_operator = single_individual_operators
         self.elite_size = elite_size
-        self._iterations = 0
+        self._iterations = start_iteration
         self._stop = False
         self._population: List[IndividualType] = []
         self._iterations_callback: List[Callable[["Evolution"], None]] = (
@@ -82,7 +83,6 @@ class EvolutionaryAlgorithm(Generic[IndividualType, GeneType, ScoreType]):
     def run(self) -> "Evolution":
         self.ensure_population_initialized()
         self._stop = False
-        self._iterations = 0
         while not self._should_stop():
             self.perform_iteration()
             self.execute_callbacks()

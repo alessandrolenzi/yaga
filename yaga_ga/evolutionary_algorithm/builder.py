@@ -8,6 +8,8 @@ from typing import (
     Union,
     cast,
 )
+
+from mypy_extensions import DefaultNamedArg
 from typing_extensions import Final
 from inspect import signature
 
@@ -48,9 +50,31 @@ class EvolutionaryAlgorithmBuilder(Generic[IndividualType, GeneType]):
         self._individual_structure: Final = individual_structure
         self.elite_size = elite_size
         self._callbacks: List[Callable[[Evolution], None]] = []
+        self._executor: Optional[Executor] = None
+        self._selector: Optional[Selector] = None
+        self._ranker: Callable[
+            [
+                Callable[[IndividualType], Q],
+                DefaultNamedArg(Optional[Executor], "executor"),
+            ],
+            Ranker,
+        ] = Ranker
 
     def selector(self, s: Selector):
         self._selector = s
+        return self
+
+    def ranker_type(
+        self,
+        r: Callable[
+            [
+                Callable[[IndividualType], Q],
+                DefaultNamedArg(Optional[Executor], "executor"),
+            ],
+            Ranker,
+        ],
+    ):
+        self._ranker = r
         return self
 
     def executor(self, e: Executor):
@@ -102,17 +126,19 @@ class EvolutionaryAlgorithmBuilder(Generic[IndividualType, GeneType]):
         return self
 
     def initialize(self, score_function: Callable[[IndividualType], Q]):
-        return EvolutionaryAlgorithm(
-            population_size=self.population_size,
-            generations=self.generations,
-            individual_structure=self._individual_structure,
-            ranker=Ranker(score_function),
-            selector=self._selector,
-            multiple_individual_operators=self._multiple_individual_operators,
-            single_individual_operators=self._single_individual_operators,
-            elite_size=self.elite_size,
-            iteration_callbacks=self._callbacks,
-        )
+        if self._selector:
+            return EvolutionaryAlgorithm(
+                population_size=self.population_size,
+                generations=self.generations,
+                individual_structure=self._individual_structure,
+                ranker=self._ranker(score_function, executor=self._executor),
+                selector=self._selector,
+                multiple_individual_operators=self._multiple_individual_operators,
+                single_individual_operators=self._single_individual_operators,
+                elite_size=self.elite_size,
+                iteration_callbacks=self._callbacks,
+            )
+        assert False, "Must specify selector!"
 
     def add_callback(self, callback: Callable[[Evolution], None]):
         self._callbacks.append(callback)
